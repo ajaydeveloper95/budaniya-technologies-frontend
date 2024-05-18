@@ -3,7 +3,7 @@ import React from 'react'
 function index() {
   return (
     <div className="w-2/3 m-auto py-4">
-    <h1>Return and Refund Policy</h1>
+    <h1 className="text-2xl text-center my-4">Return and Refund Policy</h1>
     <br />
     <p>Last updated: May 17, 2024</p>
     <p>Thank you for shopping at Budaniya Technologies.</p>
@@ -24,7 +24,9 @@ function index() {
       The following terms are applicable for any products that You purchased with
       Us.
     </p>
+    <br />
     <h2>Interpretation and Definitions</h2>
+    <br />
     <h3>Interpretation</h3>
     <p>
       The words of which the initial letter is capitalized have meanings defined
@@ -127,6 +129,7 @@ function index() {
       the returned Goods. We will use the same means of payment as You used for
       the Order, and You will not incur any fees for such reimbursement.
     </p>
+    <br />
     <h2>Conditions for Returns</h2>
     <p>
       In order for the Goods to be eligible for a return, please make sure that:
@@ -162,6 +165,7 @@ function index() {
       cannot be refunded. This exclusion may not apply to You if it is not
       permitted by applicable law.
     </p>
+    <br />
     <h2>Returning Goods</h2>
     <p>
       You are responsible for the cost and risk of returning the Goods to Us. You
@@ -174,6 +178,7 @@ function index() {
       to issue a refund without actual receipt of the Goods or proof of received
       return delivery.
     </p>
+    <br />
     <h2>Gifts</h2>
     <p>
       If the Goods were marked as a gift when purchased and then shipped directly
@@ -185,6 +190,7 @@ function index() {
       the Order shipped to themselves to give it to You later, We will send the
       refund to the gift giver.
     </p>
+    <br />
     <h3>Contact Us</h3>
     <p>
       If you have any questions about our Returns and Refunds Policy, please

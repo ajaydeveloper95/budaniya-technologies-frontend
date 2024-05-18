@@ -3,7 +3,8 @@ import React from "react";
 function index() {
   return (
     <div className="w-2/3 m-auto py-4">
-      <h1>Privacy Policy</h1>
+      <h1 className="text-2xl text-center my-4">Privacy Policy</h1>
+      <br />
       <p>Last updated: May 17, 2024</p>
       <br />
       <p>

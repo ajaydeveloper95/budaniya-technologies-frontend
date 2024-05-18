@@ -41,8 +41,7 @@ function WhatWeOffer() {
                 Refreshing Design
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              The most common reasons are to rebrand your site, increase your traffic, generate more leads, and add functionality to improve the user experience.
               </p>
             </div>
           </div>
@@ -65,11 +64,10 @@ function WhatWeOffer() {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-semibold">
-                Based on Tailwind CSS
+                Experience Team
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              The web development team can be thought of as an IT crew that takes care of the code for one or multiple websites and apps.
               </p>
             </div>
           </div>
@@ -102,11 +100,10 @@ function WhatWeOffer() {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-semibold">
-                100+ Components
+                Support
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              Web development services encompass creating, building, and maintaining websites or web applications for long term.
               </p>
             </div>
           </div>
@@ -134,8 +131,7 @@ function WhatWeOffer() {
                 Speed Optimized
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              Website optimization is the process of improving your website's performance across various areas, such as web traffic, conversion rates, and usability.
               </p>
             </div>
           </div>
@@ -159,8 +155,7 @@ function WhatWeOffer() {
                 Fully Customizable
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              This can include things like changing the color scheme, font size, or layout of a website, or adding or removing certain features.
               </p>
             </div>
           </div>
@@ -188,8 +183,7 @@ function WhatWeOffer() {
                 Regular Updates
               </h4>
               <p className="text-body-color dark:text-dark-6">
-                We dejoy working with discerning clients, people for whom
-                qualuty, service, integrity &amp; aesthetics.
+              There are several trends in web technology, ranging from AI features and functionality to serverless architecture and the growth of animated UIs and dark mode.
               </p>
             </div>
           </div>

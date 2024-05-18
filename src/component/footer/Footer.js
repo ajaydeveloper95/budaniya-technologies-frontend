@@ -1,22 +1,29 @@
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import Logo from "../../../public/assets/logoHeader.png";
 
 function Footer() {
   return (
     <footer className="bg-transparent dark:bg-gray-900">
-       <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+      <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
       <div className="mx-auto w-full p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
-          <div className="mb-6 md:mb-0">
-            <a href="https://flowbite.com/" className="flex items-center">
-              <img
-                src="https://flowbite.com/docs/images/logo.svg"
-                className="h-8 me-3"
-                alt="FlowBite Logo"
-              />
+          <div className="mb-6 md:mb-0 sm:w-full md:w-1/2 lg:w-1/3">
+            <Link href="/" className="flex items-center">
+              <Image src={Logo} className="h-8 me-3" height={40} alt="Logo" />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                Flowbite
+                Budaniya Technologies
               </span>
-            </a>
+            </Link>
+            <div className="py-2">
+              At Budaniya Technologies, we believe collaboration and innovation
+              are the keys to success. That's why we work closely with our
+              clients to understand their unique needs and goals and tailor our
+              services to deliver measurable results. We take pride in our
+              ability to think outside the box and come up with innovative
+              solutions that set our clients apart from the competition.
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
@@ -25,18 +32,20 @@ function Footer() {
               </h2>
               <ul className=" dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a href="https://flowbite.com/" className="hover:underline">
-                    Flowbite
-                  </a>
+                  <Link href="/services" className="hover:underline">
+                    Services
+                  </Link>
                 </li>
-                <li>
-                  <a
-                    href="https://tailwindcss.com/"
-                    className="hover:underline"
-                  >
-                    Tailwind CSS
-                  </a>
+                <li className="mb-4">
+                  <Link href="/pricing" className="hover:underline">
+                    Pricing
+                  </Link>
                 </li>
+                {/* <li>
+                  <Link href="/caseStudy" className="hover:underline">
+                    Case Study
+                  </Link>
+                </li> */}
               </ul>
             </div>
             <div>
@@ -45,20 +54,31 @@ function Footer() {
               </h2>
               <ul className=" dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a
-                    href="https://github.com/themesberg/flowbite"
+                  <Link
+                    href="https://github.com/ajaydeveloper95"
+                    target="_blank"
                     className="hover:underline "
                   >
                     Github
-                  </a>
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <Link
+                    href="https://www.linkedin.com/company/102926781/admin/feed/posts/?feedType=following"
+                    className="hover:underline"
+                    target="_blank"
+                  >
+                    linkedIn
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="https://discord.gg/4eeurUVvTy"
+                  <Link
+                    href="https://www.instagram.com/budaniya.technologies/?fbclid=IwZXh0bgNhZW0CMTAAAR2mYm7YSYHNlGrwsp7FDquzq1O9qm-utS1t9Mfh5ye_Gct3cVupKCU1xgg_aem_AYmc6aztm5eOsUwJPBL3Ax61vMSrF90SKmaDnaEIWeyAGbBfNPw6q0x0BwEW5D6HQjXfNra-doxIRaKiu2x_ZayO"
+                    target="_blank"
                     className="hover:underline"
                   >
-                    Discord
-                  </a>
+                    Instagram
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -68,14 +88,19 @@ function Footer() {
               </h2>
               <ul className=" dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a href="#" className="hover:underline">
+                  <Link href="/privacyPolicy" className="hover:underline">
                     Privacy Policy
-                  </a>
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <Link href="/termsAndConditions" className="hover:underline">
+                    Terms &amp; Conditions
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
-                    Terms &amp; Conditions
-                  </a>
+                  <Link href="/returnAndRefund" className="hover:underline">
+                    Return &amp; Refund
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -84,14 +109,18 @@ function Footer() {
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm  sm:text-center dark:text-gray-400">
-            © 2023{" "}
-            <a href="https://flowbite.com/" className="hover:underline">
-              Flowbite™
-            </a>
+            © 2024{" "}
+            <Link href="/" className="hover:underline">
+              Budaniya Technologies
+            </Link>
             . All Rights Reserved.
           </span>
           <div className="flex mt-4 sm:justify-center sm:mt-0">
-            <a href="#" className=" hover: dark:hover:text-white">
+            <a
+              href="https://www.facebook.com/people/Budaniya-Technologies/61559805143453/"
+              target="_blank"
+              className=" hover: dark:hover:text-white"
+            >
               <svg
                 className="w-4 h-4"
                 aria-hidden="true"
@@ -107,19 +136,28 @@ function Footer() {
               </svg>
               <span className="sr-only">Facebook page</span>
             </a>
-            <a href="#" className=" hover: dark:hover:text-white ms-5">
+            <a href="https://www.instagram.com/budaniya.technologies/?fbclid=IwZXh0bgNhZW0CMTAAAR2mYm7YSYHNlGrwsp7FDquzq1O9qm-utS1t9Mfh5ye_Gct3cVupKCU1xgg_aem_AYmc6aztm5eOsUwJPBL3Ax61vMSrF90SKmaDnaEIWeyAGbBfNPw6q0x0BwEW5D6HQjXfNra-doxIRaKiu2x_ZayO" target="_blank" className=" hover: dark:hover:text-white ms-5">
               <svg
-                className="w-4 h-4"
-                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 21 16"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="white"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                <path d="M16.942 1.556a16.3 16.3 0 0 0-4.126-1.3 12.04 12.04 0 0 0-.529 1.1 15.175 15.175 0 0 0-4.573 0 11.585 11.585 0 0 0-.535-1.1 16.274 16.274 0 0 0-4.129 1.3A17.392 17.392 0 0 0 .182 13.218a15.785 15.785 0 0 0 4.963 2.521c.41-.564.773-1.16 1.084-1.785a10.63 10.63 0 0 1-1.706-.83c.143-.106.283-.217.418-.33a11.664 11.664 0 0 0 10.118 0c.137.113.277.224.418.33-.544.328-1.116.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595 17.286 17.286 0 0 0-2.973-11.59ZM6.678 10.813a1.941 1.941 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.919 1.919 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Zm6.644 0a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.918 1.918 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Z" />
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
-              <span className="sr-only">Discord community</span>
+              <span className="sr-only">Instagram community</span>
             </a>
-            <a href="#" className=" hover: dark:hover:text-white ms-5">
+            <a
+              href="https://twitter.com/budaniyatech"
+              target="_blank"
+              className=" hover: dark:hover:text-white ms-5"
+            >
               <svg
                 className="w-4 h-4"
                 aria-hidden="true"
@@ -135,7 +173,11 @@ function Footer() {
               </svg>
               <span className="sr-only">Twitter page</span>
             </a>
-            <a href="#" className=" hover: dark:hover:text-white ms-5">
+            <a
+              href="https://github.com/ajaydeveloper95"
+              target="_blank"
+              className=" hover: dark:hover:text-white ms-5"
+            >
               <svg
                 className="w-4 h-4"
                 aria-hidden="true"
@@ -150,22 +192,6 @@ function Footer() {
                 />
               </svg>
               <span className="sr-only">GitHub account</span>
-            </a>
-            <a href="#" className=" hover: dark:hover:text-white ms-5">
-              <svg
-                className="w-4 h-4"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 0a10 10 0 1 0 10 10A10.009 10.009 0 0 0 10 0Zm6.613 4.614a8.523 8.523 0 0 1 1.93 5.32 20.094 20.094 0 0 0-5.949-.274c-.059-.149-.122-.292-.184-.441a23.879 23.879 0 0 0-.566-1.239 11.41 11.41 0 0 0 4.769-3.366ZM8 1.707a8.821 8.821 0 0 1 2-.238 8.5 8.5 0 0 1 5.664 2.152 9.608 9.608 0 0 1-4.476 3.087A45.758 45.758 0 0 0 8 1.707ZM1.642 8.262a8.57 8.57 0 0 1 4.73-5.981A53.998 53.998 0 0 1 9.54 7.222a32.078 32.078 0 0 1-7.9 1.04h.002Zm2.01 7.46a8.51 8.51 0 0 1-2.2-5.707v-.262a31.64 31.64 0 0 0 8.777-1.219c.243.477.477.964.692 1.449-.114.032-.227.067-.336.1a13.569 13.569 0 0 0-6.942 5.636l.009.003ZM10 18.556a8.508 8.508 0 0 1-5.243-1.8 11.717 11.717 0 0 1 6.7-5.332.509.509 0 0 1 .055-.02 35.65 35.65 0 0 1 1.819 6.476 8.476 8.476 0 0 1-3.331.676Zm4.772-1.462A37.232 37.232 0 0 0 13.113 11a12.513 12.513 0 0 1 5.321.364 8.56 8.56 0 0 1-3.66 5.73h-.002Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="sr-only">Dribbble account</span>
             </a>
           </div>
         </div>

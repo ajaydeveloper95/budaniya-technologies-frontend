@@ -1,4 +1,6 @@
 import React from "react";
+import digi from "../../../public/assets/digitalSolutions.png";
+import Image from "next/image";
 
 function About() {
   return (
@@ -7,14 +9,21 @@ function About() {
         <div className="grid items-center grid-cols-1 md:grid-cols-2">
           <div>
             <h2 className="text-3xl font-bold leading-tight dark:text-white sm:text-4xl lg:text-5xl">
-              Hey 👋 I am
-              <br className="block sm:hidden" />
-              Jenny Carter
+              Hey 👋
+              <br className="block sm:hidden" />,
             </h2>
             <p className="max-w-lg mt-3 text-xl leading-relaxed  dark:text-gray-300 md:mt-8">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
-              Exercitation veniam consequat sunt nostrud amet.
+              We are a team of tech enthusiasts and creative masterminds who
+              strive to bring our client's visions to life. <br /><br /> Our mission is to
+              help businesses achieve their goals through effective Technology
+              Solutions. 
+              <br />At Budaniya Technologies, we believe collaboration and
+              innovation are the keys to success. That's why we work closely
+              with our clients to understand their unique needs and goals and
+              tailor our services to deliver measurable results. <br /> <br /> We take pride
+              in our ability to think outside the box and come up with
+              innovative solutions that set our clients apart from the
+              competition.
             </p>
             <p className="mt-4 text-xl  dark:text-gray-300 md:mt-8">
               <span className="relative inline-block">
@@ -28,20 +37,15 @@ function About() {
                 title=""
                 className="transition-all duration-200 text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-500 hover:underline"
               >
-                Twitter
+                Join@budaniyatechnologies.com
               </a>
             </p>
           </div>
           <div className="relative">
-            <img
-              className="absolute inset-x-0 bottom-0 -mb-48 -translate-x-1/2 left-1/2"
-              src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/blob-shape.svg"
-              alt=""
-            />
-            <img
+            <Image
               className="relative w-full xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
-              src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/business-woman.png"
-              alt=""
+              src={digi}
+              alt="file"
             />
           </div>
         </div>

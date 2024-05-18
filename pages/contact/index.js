@@ -13,7 +13,7 @@ function index() {
               Get in Touch
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-xl dark:text-slate-400">
-              In hac habitasse platea dictumst
+              Connect With Us !
             </p>
           </div>
         </div>
@@ -21,9 +21,10 @@ function index() {
           <div className="grid md:grid-cols-2">
             <div className="h-full pr-6">
               <p className="mt-3 mb-12 text-lg dark:text-slate-400">
-                Class aptent taciti sociosqu ad litora torquent per conubia
-                nostra, per inceptos himenaeos. Duis nec ipsum orci. Ut
-                scelerisque sagittis ante, ac tincidunt sem venenatis ut.
+                We are a team of tech enthusiasts and creative masterminds who
+                strive to bring our client's visions to life. <br />Our mission is to
+                help businesses achieve their goals through effective Technology
+                Solutions.
               </p>
               <ul className="mb-6 md:mb-0">
                 <li className="flex">
@@ -49,9 +50,9 @@ function index() {
                       Our Address
                     </h3>
                     <p className=" dark:text-slate-400">
-                      1230 Maecenas Street Donec Road
+                      Madhopura,Balaran,Sikar (332401)
                     </p>
-                    <p className=" dark:text-slate-400">New York, EEUU</p>
+                    <p className=" dark:text-slate-400">Rajasthan,India</p>
                   </div>
                 </li>
                 <li className="flex">
@@ -78,10 +79,10 @@ function index() {
                       Contact
                     </h3>
                     <p className=" dark:text-slate-400">
-                      Mobile: +1 (123) 456-7890
+                      Mobile: +91 7014 162730
                     </p>
                     <p className=" dark:text-slate-400">
-                      Mail: tailnext@gmail.com
+                      Mail: join@budaniyatechnologies.com
                     </p>
                   </div>
                 </li>
@@ -108,10 +109,10 @@ function index() {
                       Working hours
                     </h3>
                     <p className=" dark:text-slate-400">
-                      Monday - Friday: 08:00 - 17:00
+                      Monday - Friday: 09:00 - 18:30
                     </p>
                     <p className=" dark:text-slate-400">
-                      Saturday &amp; Sunday: 08:00 - 12:00
+                      Saturday &amp; Sunday: Holiday
                     </p>
                   </div>
                 </li>
