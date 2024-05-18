@@ -11,7 +11,7 @@ function PlansAndPrice() {
           Get started on our free plan and upgrade when you are ready.
         </p>
       </div>
-      <div className="mt-24 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+      <div className="mt-24 -z-10 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
           <div className="flex-1">
             <h3 className="text-xl font-semibold ">Basic</h3>

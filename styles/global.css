@@ -6,4 +6,11 @@
 body {
     background-color: rgba(19, 7, 46, 255);
     color: white;
+    
+}
+
+#navbar-default ul{
+    background-color: rgba(19, 7, 46, 255);
+    color: white;
+    z-index: 40;
 }
