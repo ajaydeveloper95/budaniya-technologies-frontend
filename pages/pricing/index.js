@@ -3,7 +3,7 @@ import PlansAndPrice from '../../src/component/home/PlansAndPrice'
 
 function index() {
   return (
-    <div>
+    <div className='mx-6'>
       <PlansAndPrice/>
     </div>
   )

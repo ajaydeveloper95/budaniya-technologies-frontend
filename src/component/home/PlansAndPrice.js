@@ -2,7 +2,7 @@ import React from "react";
 
 function PlansAndPrice() {
   return (
-    <div className="flex flex-warp items-center flex-col">
+    <div className="flex flex-warp mx-1 items-center flex-col">
       <div>
         <h2 className="text-3xl font-bold tracki text-center mt-12 sm:text-5xl ">
           Pricing

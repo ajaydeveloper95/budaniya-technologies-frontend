@@ -4,7 +4,7 @@ import Carousel from "react-multi-carousel";
 
 function Testimonials() {
   const [device, setdevice] = useState("desktop");
-  const [width, setwidth] = useState("tablet")
+  const [width, setwidth] = useState("tablet");
   const Obj = [
     { title: "hello", data: "good" },
     { title: "hello", data: "good" },
@@ -33,7 +33,7 @@ function Testimonials() {
   };
 
   return (
-    <section className="py-24 ">
+    <section className="py-24 relative -z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 ">
           <span className="text-sm text-gray-500 font-medium text-center block mb-2">
