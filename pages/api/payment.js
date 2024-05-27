@@ -2,6 +2,10 @@ const axios = require("axios");
 const crypto = require("crypto");
 
 export default async function payment(req, res) {
+  req.headers.set("Access-Control-Allow-Origin", "*");
+  req.headers.set("Access-Control-Allow-Methods", ["POST", "GET", "PUT"]);
+  req.headers.set("Access-Control-Allow-Headers", "Content-Type");
+
   if (req.method === "POST") {
     // phonepe payment gatway
     let salt_key = "3246fbfd-d226-4739-9e65-d9d7d4aa8382";
