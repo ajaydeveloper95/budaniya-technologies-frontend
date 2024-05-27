@@ -6,7 +6,7 @@ import Logo from "../../../public/assets/logoHeader.png";
 function Navbar() {
   const [show, setshow] = useState(false)
   return (
-    <nav className="bg-black top-0 sticky border-gray-200 dark:bg-gray-900">
+    <nav className="bg-black top-0 sticky z-10 border-gray-200 dark:bg-gray-900">
       <div className="flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           href="/"

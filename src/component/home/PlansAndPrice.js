@@ -1,6 +1,24 @@
+import axios from "axios";
 import React from "react";
 
 function PlansAndPrice() {
+  const onHandle = (e) => {
+    const payment = Number(e.target.name);
+    const url = "https://api.budaniyatechnologies.com/payment/";
+    axios
+      .post(url, {
+        email: "kumarajay4113@gmail.com",
+        name: "Ajay kumar",
+        amount: 2,
+        phone: "8000623206",
+      })
+      .then((data) => {
+        // console.log(data);
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
   return (
     <div className="flex flex-warp mx-1 items-center flex-col">
       <div>
@@ -11,7 +29,7 @@ function PlansAndPrice() {
           Get started on our free plan and upgrade when you are ready.
         </p>
       </div>
-      <div className="mt-24 -z-10 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+      <div className="mt-24 z-0 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
           <div className="flex-1">
             <h3 className="text-xl font-semibold ">Basic</h3>
@@ -97,12 +115,13 @@ function PlansAndPrice() {
               </li>
             </ul>
           </div>
-          <a
+          <button
+            onClick={onHandle}
+            name="5000"
             className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
-            href="#"
           >
             Join Now
-          </a>
+          </button>
         </div>
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
           <div className="flex-1">
@@ -112,7 +131,7 @@ function PlansAndPrice() {
             </p>
             <p className="mt-4 flex items-baseline ">
               <span className="text-5xl font-extrabold tracking-tight">
-              ₹ 18000
+                ₹ 18000
               </span>
               <span className="ml-1 text-xl font-semibold">/Starting</span>
             </p>
@@ -212,12 +231,13 @@ function PlansAndPrice() {
               </li>
             </ul>
           </div>
-          <a
-            className="bg-emerald-500 text-white  hover:bg-emerald-600 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
-            href="#"
+          <button
+            className="bg-emerald-500 cursor-pointer text-white  hover:bg-emerald-600 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
+            onClick={onHandle}
+            name="18000"
           >
             Join Now
-          </a>
+          </button>
         </div>
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
           <div className="flex-1">
@@ -227,7 +247,7 @@ function PlansAndPrice() {
             </p>
             <p className="mt-4 flex items-baseline ">
               <span className="text-5xl font-extrabold tracking-tight">
-              ₹ 26000
+                ₹ 26000
               </span>
               <span className="ml-1 text-xl font-semibold">/Starting</span>
             </p>
@@ -327,12 +347,13 @@ function PlansAndPrice() {
               </li>
             </ul>
           </div>
-          <a
+          <button
             className="bg-emerald-500 text-white  hover:bg-emerald-600 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
-            href="#"
+            onClick={onHandle}
+            name="26000"
           >
             Join Now
-          </a>
+          </button>
         </div>
       </div>
     </div>
