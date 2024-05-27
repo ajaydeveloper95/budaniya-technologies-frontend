@@ -14,7 +14,7 @@ function PlansAndPrice() {
   };
 
   const onPayment = () => {
-    const url = "http://localhost:3010/api/payment/";
+    const url = "https://budaniyatechnologies.com/api/payment/";
     if (
       getData.name !== undefined &&
       getData.email !== undefined &&
