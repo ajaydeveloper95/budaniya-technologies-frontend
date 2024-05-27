@@ -1,24 +1,45 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 function PlansAndPrice() {
+  const [showModal, setShowModal] = useState(false);
+  const [getData, setData] = useState({});
   const onHandle = (e) => {
     const payment = Number(e.target.name);
-    const url = "https://api.budaniyatechnologies.com/payment/";
-    axios
-      .post(url, {
-        email: "kumarajay4113@gmail.com",
-        name: "Ajay kumar",
-        amount: 2,
-        phone: "8000623206",
-      })
-      .then((data) => {
-        // console.log(data);
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
+    setData((value) => ({
+      ...value,
+      amount: payment,
+    }));
+    setShowModal(true);
   };
+
+  const onPayment = () => {
+    const url = "http://localhost:3010/api/payment/";
+    if (
+      getData.name !== undefined &&
+      getData.email !== undefined &&
+      getData.phone !== undefined &&
+      getData.amount !== 0
+    ) {
+      console.log(getData);
+      axios
+        .post(url, {
+          email: "kumarajay4113@gmail.com",
+          name: "Ajay kumar",
+          amount: 2,
+          phone: "8000623206",
+        })
+        .then((data) => {
+          // console.log(data);
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+    } else {
+      console.log("some issue on post payment request");
+    }
+  };
+
   return (
     <div className="flex flex-warp mx-1 items-center flex-col">
       <div>
@@ -120,7 +141,7 @@ function PlansAndPrice() {
             name="5000"
             className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
           >
-            Join Now
+            Pay Now
           </button>
         </div>
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
@@ -236,7 +257,7 @@ function PlansAndPrice() {
             onClick={onHandle}
             name="18000"
           >
-            Join Now
+            Pay Now
           </button>
         </div>
         <div className="relative p-8  border border-gray-200 rounded-2xl shadow-sm flex flex-col">
@@ -352,10 +373,127 @@ function PlansAndPrice() {
             onClick={onHandle}
             name="26000"
           >
-            Join Now
+            Pay Now
           </button>
         </div>
       </div>
+
+      {/* model start */}
+      <div>
+        {showModal ? (
+          <>
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+              <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                {/*content*/}
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white text-gray-600 text-blackoutline-none focus:outline-none">
+                  {/*header*/}
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                    <h3 className="text-3xl font-semibold">Payment Process</h3>
+                    <button
+                      className="p-1 ml-auto bg-transparent border-0 text-gray-600 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <span className="bg-transparent text-gray-600 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                        ×
+                      </span>
+                    </button>
+                  </div>
+                  {/*body*/}
+                  <div className="relative p-6 flex-auto">
+                    <form className="max-w-64  mx-auto">
+                      <div className="mb-5">
+                        <label
+                          htmlFor="email"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Your email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          onChange={(e) => {
+                            setData((value) => ({
+                              ...value,
+                              email: e.target.value,
+                            }));
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="name@flowbite.com"
+                          required=""
+                        />
+                      </div>
+                      <div className="mb-5">
+                        <label
+                          htmlFor="nameid"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Your Name
+                        </label>
+                        <input
+                          type="nameid"
+                          id="nameid"
+                          onChange={(e) => {
+                            setData((value) => ({
+                              ...value,
+                              name: e.target.value,
+                            }));
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="enter your name"
+                          required=""
+                        />
+                      </div>
+                      <div className="mb-5">
+                        <label
+                          htmlFor="nameid"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Your Mobile Number
+                        </label>
+                        <input
+                          type="phone"
+                          id="phone"
+                          onChange={(e) => {
+                            setData((value) => ({
+                              ...value,
+                              phone: e.target.value,
+                            }));
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="99999*****"
+                          required=""
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  {/*footer*/}
+                  <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                    <button
+                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Close
+                    </button>
+                    <button
+                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => {
+                        setShowModal(false);
+                        onPayment();
+                      }}
+                    >
+                      Pay Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
+        ) : null}
+      </div>
+      {/* model end  */}
     </div>
   );
 }
