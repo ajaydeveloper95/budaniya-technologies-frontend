@@ -2,10 +2,6 @@ const axios = require("axios");
 const crypto = require("crypto");
 
 export default async function payment(req, res) {
-  req.headers.set("Access-Control-Allow-Origin", "*");
-  req.headers.set("Access-Control-Allow-Methods", ["POST", "GET", "PUT"]);
-  req.headers.set("Access-Control-Allow-Headers", "Content-Type");
-
   if (req.method === "POST") {
     const merchantTransactionId = res.req.body.merchantTransactionId;
     const merchantId = res.req.body.merchantId;
