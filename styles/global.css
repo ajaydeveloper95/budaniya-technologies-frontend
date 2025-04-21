@@ -22,4 +22,8 @@ body {
     right: 8% !important;
     top: 14px !important;
   }
-  
+  .size{
+        width: 91% !important;
+        display: inline-block;
+        margin: 0 10px !important;
+    }

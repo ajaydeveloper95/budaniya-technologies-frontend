@@ -148,22 +148,20 @@ const ProductDetails = () => {
       {/* Product Cards Slider */}
       <Slider {...settings}>
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-transparent border border-white/20 rounded-lg shadow-md overflow-hidden hover:shadow-white transition duration-300 mx-2 p-4 mt-10"
-            style={{
-              marginRight: "1rem",
-              gap: "1rem",
-            }}
-          >
+          <div 
+          key={product.id}
+          
+
+        >
+            <div className=" size bg-transparent border border-white/20 rounded-lg shadow-md overflow-hidden hover:shadow-white transition duration-300 p-4">
             {/* Image Section */}
-            <div className="relative">
+            <div className="relative" >
               <img
                 src={product.image}
                 alt={product.title}
-                className="w-full h-32 object-cover rounded"
+                className="w-full h-40 object-cover rounded"
               />
-              <div className="absolute top-2 right-2 bg-white text-black text-xs font-bold px-2 py-0.5 rounded">
+              <div className="absolute top-2 right-2 bg-red-400 text-white text-xs font-bold px-2 py-0.5 rounded">
                 {product.badge}
               </div>
             </div>
@@ -181,15 +179,15 @@ const ProductDetails = () => {
               {/* Price Display */}
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-xl font-bold text-green-300">
-                  {product.price}/-
+                  ₹ {product.price}/-
                 </span>
                 {product.originalPrice > product.price && (
                   <>
                     <span className="line-through text-gray-400 text-sm">
-                      {product.originalPrice}/-
+                      ₹ {product.originalPrice}/-
                     </span>
                     <span className="text-sm text-red-400 font-medium">
-                      Save {product.originalPrice - product.price}/-
+                      Save ₹ {product.originalPrice - product.price}/-
                     </span>
                   </>
                 )}
@@ -221,6 +219,7 @@ const ProductDetails = () => {
                 </a>
               </div>
             </div>
+          </div>
           </div>
         ))}
       </Slider>
