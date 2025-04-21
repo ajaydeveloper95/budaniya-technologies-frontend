@@ -37,8 +37,8 @@ function Footer() {
                   </Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="/pricing" className="hover:underline">
-                    Pricing
+                  <Link href="/products" className="hover:underline">
+                    Products
                   </Link>
                 </li>
                 {/* <li>

@@ -7,7 +7,7 @@ function WhatWeOffer() {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-12 max-w-[510px] text-center lg:mb-20">
-              <span className="text-primary mb-2 block text-lg font-semibold">
+              <span className="text-primary mb-2 block text-2xl font-semibold">
                 Our Services
               </span>
               <h2 className="text-dark dark:text-white mb-3 text-3xl leading-[1.2] font-bold sm:text-4xl md:text-[40px]">

@@ -40,6 +40,20 @@ function PlansAndPrice() {
     }
   };
 
+  const handleAddToCart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // You can customize this item object depending on your use case
+    const dummyItem = {
+      id: Date.now(),
+      name: "Sample Product",
+      quantity: 1
+    };
+  
+    cart.push(dummyItem);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setCartCount(cart.length);
+  };
   return (
     <div className="flex flex-warp mx-1 items-center flex-col">
       <div>
