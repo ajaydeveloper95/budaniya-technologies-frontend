@@ -1,12 +1,13 @@
 import React from "react";
 
+
 function WhatWeOffer() {
   return (
-    <section className="pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] dark:bg-dark">
+    <section className="pt-10  lg:pt-[80px] lg:pb-[90px] dark:bg-dark">
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
-            <div className="mx-auto mb-12 max-w-[510px] text-center lg:mb-20">
+            <div className="mx-auto max-w-[510px] text-center lg:mb-20">
               <span className="text-primary mb-2 block text-2xl font-semibold">
                 Our Services
               </span>
