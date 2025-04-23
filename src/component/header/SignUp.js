@@ -34,33 +34,45 @@ const SignUp = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
-  
+
     const {
-      firstName, lastName, email, password, confirmPassword,
-      mobile, address, company, gstInNumber
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      mobile,
+      address,
+      company,
+      gstInNumber,
     } = formData;
-  
+
     if (
-      !firstName || !lastName || !email || !password || !confirmPassword ||
-      !mobile || !address
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !mobile ||
+      !address
     ) {
       setError("All fields are required.");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-  
+
     try {
       const response = await apiPost(API_ENDPOINT, { ...formData });
-  
+
       if (response.data?.accessToken) {
         localStorage.setItem("accessToken", response.accessToken);
         localStorage.setItem("refreshToken", response.refreshToken);
         setSuccess(response?.message || "Registration successful!");
-  
+
         // ✅ Delay redirect slightly to show success message
         setTimeout(() => {
           window.location.href = "/signIn";
@@ -72,12 +84,10 @@ const SignUp = () => {
       setError(err.response?.data?.msg || "Something went wrong.");
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
       <div className="flex flex-col md:flex-row w-full max-w-5xl shadow-2xl rounded-2xl overflow-hidden bg-white/20 backdrop-blur-lg text-black">
-        
         {/* Left Visual */}
         <div className="md:w-1/2 hidden md:block">
           <img
@@ -89,22 +99,94 @@ const SignUp = () => {
 
         {/* Right Form */}
         <div className="w-full md:w-1/2 p-8 space-y-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Create Your Account</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Create Your Account
+          </h2>
 
-          {error && <div className="text-red-400 text-sm text-center">{error}</div>}
-          {success && <div className="text-green-400 text-sm text-center">{success}</div>}
+          {error && (
+            <div className="text-red-400 text-sm text-center">{error}</div>
+          )}
+          {success && (
+            <div className="text-green-400 text-sm text-center">{success}</div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} className="input" />
-              <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} className="input" />
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="input" />
-              <input name="mobile" placeholder="Mobile" value={formData.mobile} onChange={handleChange} className="input" />
-              <input name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="input" />
-              <input name="company" placeholder="Company" value={formData.company} onChange={handleChange} className="input" />
-              <input name="gstInNumber" placeholder="GSTIN Number" value={formData.gstInNumber} onChange={handleChange} className="input" />
-              <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} className="input" />
-              <input name="confirmPassword" type="password" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} className="input" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-lg">
+              <input
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="mobile"
+                placeholder="Mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="company"
+                placeholder="Company"
+                value={formData.company}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="gstInNumber"
+                placeholder="GSTIN Number"
+                value={formData.gstInNumber}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
+              <input
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="input"
+                style={{ borderRadius: '10px', padding: "10px"}}
+              />
             </div>
 
             <button
