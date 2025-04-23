@@ -213,7 +213,7 @@ const Product = () => {
           </div>
         </div>
         
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex justify-center">
           <button
             onClick={resetAllFilters}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
