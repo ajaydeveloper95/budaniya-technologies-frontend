@@ -7,12 +7,13 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apiGet } from "../../utils/http";
 
-const API_ENDPOINT = '/api/auth/logOut';
+const API_ENDPOINT = "/api/auth/logOut";
 
 function Navbar() {
   const { cartCount } = useCart();
   const [show, setShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showProductsDropdown, setShowProductsDropdown] = useState(false);
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
@@ -22,7 +23,6 @@ function Navbar() {
   useEffect(() => {
     checkLoginStatus();
 
-    // Listen to storage changes (cross-tab and programmatic)
     const handleStorageChange = () => {
       checkLoginStatus();
     };
@@ -76,24 +76,116 @@ function Navbar() {
           className="inline-flex items-center p-2 w-10 h-10 md:hidden"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+            <path
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
           </svg>
         </button>
         <div className={`${show ? "" : "hidden"} w-full md:block md:w-auto`}>
           <ul className="flex flex-col md:flex-row md:space-x-8 text-white">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/services">Services</Link></li>
-            <li><Link href="/allProducts">Products</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-            <li><Link href="/cart" className="text-2xl">🛒</Link></li>
-            {cartCount > 0 && (
-              <span className="cart-badge bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {cartCount}
-              </span>
-            )}
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+            <li>
+              <Link href="/about">About</Link>
+            </li>
+            <li>
+              <Link href="/services">Services</Link>
+            </li>
+            <li 
+              className="relative"
+              onMouseEnter={() => setShowProductsDropdown(true)}
+              onMouseLeave={() => setShowProductsDropdown(false)}
+            >
+              <div className="flex items-center">
+                <Link 
+                  href="/allProducts" 
+                  onClick={() => setShowProductsDropdown(!showProductsDropdown)}
+                >
+                  Products
+                </Link>
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              {showProductsDropdown && (
+                <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                  <Link
+                    href="/products/web-development"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShow(false)}
+                  >
+                    Web Development
+                  </Link>
+                  <Link
+                    href="/products/frontend"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShow(false)}
+                  >
+                    Frontend Development
+                  </Link>
+                  <Link
+                    href="/products/backend"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShow(false)}
+                  >
+                    Backend Development
+                  </Link>
+                  <Link
+                    href="/products/fullstack"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShow(false)}
+                  >
+                    Fullstack Development
+                  </Link>
+                  <Link
+                    href="/products/mobile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShow(false)}
+                  >
+                    Mobile Development
+                  </Link>
+                  <Link
+                    href="/allProducts"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold border-t border-gray-200"
+                    onClick={() => setShow(false)}
+                  >
+                    View All Products
+                  </Link>
+                </div>
+              )}
+            </li>
+            <li>
+              <Link href="/contact">Contact</Link>
+            </li>
+            <li className="flex items-center">
+              <Link href="/cart" className="text-2xl">
+                🛒
+              </Link>
+              {cartCount > 0 && (
+                <span className="cart-badge bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full ml-1">
+                  {cartCount}
+                </span>
+              )}
+            </li>
             {isLoggedIn ? (
-              <button onClick={handleLogout} className="bg-red-800 px-3 rounded text-white">
+              <button
+                onClick={handleLogout}
+                className="bg-red-800 px-3 rounded text-white"
+              >
                 Logout
               </button>
             ) : (

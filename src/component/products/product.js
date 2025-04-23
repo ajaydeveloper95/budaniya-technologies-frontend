@@ -4,24 +4,104 @@ import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
-const API_ENDPOINT =
-  "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b";
+const API_ENDPOINT = "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b";
 
 const Product = () => {
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    minPrice: "",
+    maxPrice: "",
+    minDiscount: "",
+    maxDiscount: "",
+  });
+  const [sortBy, setSortBy] = useState("no");
+  const [order, setOrder] = useState("no");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await apiGet(API_ENDPOINT);
         setProducts(res.data.products);
+        setFilteredProducts(res.data.products);
       } catch (err) {
         console.error("Failed to fetch products", err);
       }
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [filters, sortBy, order, products]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const applyFilters = () => {
+    let result = [...products];
+    
+    // Apply search filter
+    if (filters.search) {
+      result = result.filter(product => 
+        product.productName.toLowerCase().includes(filters.search.toLowerCase()) ||
+        product.description.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+    
+    // Apply price filters
+    if (filters.minPrice) {
+      result = result.filter(product => product.actualPrice >= Number(filters.minPrice));
+    }
+    if (filters.maxPrice) {
+      result = result.filter(product => product.actualPrice <= Number(filters.maxPrice));
+    }
+    
+    // Apply discount filters
+    if (filters.minDiscount) {
+      result = result.filter(product => product.discount >= Number(filters.minDiscount));
+    }
+    if (filters.maxDiscount) {
+      result = result.filter(product => product.discount <= Number(filters.maxDiscount));
+    }
+    
+    // Apply sorting
+    if (sortBy !== "no") {
+      result.sort((a, b) => {
+        if (sortBy === "price") {
+          return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
+        } else if (sortBy === "discount") {
+          return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
+        } else if (sortBy === "name") {
+          return order === "asc" 
+            ? a.productName.localeCompare(b.productName) 
+            : b.productName.localeCompare(a.productName);
+        }
+        return 0;
+      });
+    }
+    
+    setFilteredProducts(result);
+  };
+
+  const resetAllFilters = () => {
+    setFilters({
+      search: "",
+      minPrice: "",
+      maxPrice: "",
+      minDiscount: "",
+      maxDiscount: "",
+    });
+    setSortBy("no");
+    setOrder("no");
+  };
 
   const handleAddToCart = async (product) => {
     try {
@@ -43,20 +123,114 @@ const Product = () => {
     <div className="min-h-screen p-4 mt-10">
       {/* Heading */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-white mb-2">Our Products</h1>
+        <h1 className="text-4xl font-bold text-white mb-2">FRESH OFF THE RUNWAY</h1>
         <p className="text-white text-lg">
           Weekly Bestsellers Handpicked for You
         </p>
       </div>
 
+      {/* Filters */}
+      <div className="bg-white/10 p-4 rounded-lg mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
+          <div className="col-span-2 md:col-span-1">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search products"
+              value={filters.search}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            />
+          </div>
+          
+          <div>
+            <input
+              type="number"
+              name="minPrice"
+              placeholder="Min Price"
+              value={filters.minPrice}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            />
+          </div>
+          
+          <div>
+            <input
+              type="number"
+              name="maxPrice"
+              placeholder="Max Price"
+              value={filters.maxPrice}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            />
+          </div>
+          
+          <div>
+            <input
+              type="number"
+              name="minDiscount"
+              placeholder="Min %"
+              value={filters.minDiscount}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            />
+          </div>
+          
+          <div>
+            <input
+              type="number"
+              name="maxDiscount"
+              placeholder="Max %"
+              value={filters.maxDiscount}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            />
+          </div>
+          
+          <div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            >
+              <option value="no" style={{color: 'black'}}>Sort By</option>
+              <option value="price" style={{color: 'black'}}>Price</option>
+              <option value="discount" style={{color: 'black'}}>Discount</option>
+              <option value="name" style={{color: 'black'}}>Name</option>
+            </select>
+          </div>
+          
+          <div>
+            <select
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+            >
+              <option value="no" style={{color: 'black'}}>Order</option>
+              <option value="asc" style={{color: 'black'}}>Ascending</option>
+              <option value="desc" style={{color: 'black'}}>Descending</option>
+            </select>
+          </div>
+        </div>
+        
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={resetAllFilters}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Reset All
+          </button>
+        </div>
+      </div>
+
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div
             key={product._id}
             className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300 p-4"
           >
-            <Link href={`/product/${product._id}`} className="block">
+            <Link href={`/products/${product._id}`} className="block">
               <div className="relative">
                 <img
                   src={product.images[0]}
