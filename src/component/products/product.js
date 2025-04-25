@@ -3,8 +3,10 @@ import { useCart } from "../CartContext";
 import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-const API_ENDPOINT = "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b";
+const API_ENDPOINT =
+  "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b";
 
 const Product = () => {
   const { addToCart } = useCart();
@@ -19,6 +21,9 @@ const Product = () => {
   });
   const [sortBy, setSortBy] = useState("no");
   const [order, setOrder] = useState("no");
+
+  const router = useRouter();
+  const { categoryId } = router.query;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,59 +40,83 @@ const Product = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [filters, sortBy, order, products]);
+  }, [filters, sortBy, order, products, categoryId]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const applyFilters = () => {
     let result = [...products];
-    
-    // Apply search filter
-    if (filters.search) {
-      result = result.filter(product => 
-        product.productName.toLowerCase().includes(filters.search.toLowerCase()) ||
-        product.description.toLowerCase().includes(filters.search.toLowerCase())
+
+    // Category filtering based on URL param
+    if (categoryId && categoryId !== "all") {
+      result = result.filter(
+        (product) => product.category && product.category._id === categoryId
       );
     }
-    
-    // Apply price filters
+
+    // Search filter
+    if (filters.search) {
+      result = result.filter(
+        (product) =>
+          product.productName
+            .toLowerCase()
+            .includes(filters.search.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(filters.search.toLowerCase())
+      );
+    }
+
+    // Price filters
     if (filters.minPrice) {
-      result = result.filter(product => product.actualPrice >= Number(filters.minPrice));
+      result = result.filter(
+        (product) => product.actualPrice >= Number(filters.minPrice)
+      );
     }
     if (filters.maxPrice) {
-      result = result.filter(product => product.actualPrice <= Number(filters.maxPrice));
+      result = result.filter(
+        (product) => product.actualPrice <= Number(filters.maxPrice)
+      );
     }
-    
-    // Apply discount filters
+
+    // Discount filters
     if (filters.minDiscount) {
-      result = result.filter(product => product.discount >= Number(filters.minDiscount));
+      result = result.filter(
+        (product) => product.discount >= Number(filters.minDiscount)
+      );
     }
     if (filters.maxDiscount) {
-      result = result.filter(product => product.discount <= Number(filters.maxDiscount));
+      result = result.filter(
+        (product) => product.discount <= Number(filters.maxDiscount)
+      );
     }
-    
-    // Apply sorting
+
+    // Sorting
     if (sortBy !== "no") {
       result.sort((a, b) => {
         if (sortBy === "price") {
-          return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
+          return order === "asc"
+            ? a.actualPrice - b.actualPrice
+            : b.actualPrice - a.actualPrice;
         } else if (sortBy === "discount") {
-          return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
+          return order === "asc"
+            ? a.discount - b.discount
+            : b.discount - a.discount;
         } else if (sortBy === "name") {
-          return order === "asc" 
-            ? a.productName.localeCompare(b.productName) 
+          return order === "asc"
+            ? a.productName.localeCompare(b.productName)
             : b.productName.localeCompare(a.productName);
         }
         return 0;
       });
     }
-    
+
     setFilteredProducts(result);
   };
 
@@ -121,98 +150,79 @@ const Product = () => {
 
   return (
     <div className="min-h-screen p-4 mt-10">
-      {/* Heading */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-white mb-2">FRESH OFF THE RUNWAY</h1>
+        <h1 className="text-4xl font-bold text-white mb-2">
+          FRESH OFF THE RUNWAY
+        </h1>
         <p className="text-white text-lg">
           Weekly Bestsellers Handpicked for You
         </p>
       </div>
 
-      {/* Filters */}
+      {/* Filters UI */}
       <div className="bg-white/10 p-4 rounded-lg mb-8">
         <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
-          <div className="col-span-2 md:col-span-1">
-            <input
-              type="text"
-              name="search"
-              placeholder="Search products"
-              value={filters.search}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="minPrice"
-              placeholder="Min Price"
-              value={filters.minPrice}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="maxPrice"
-              placeholder="Max Price"
-              value={filters.maxPrice}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="minDiscount"
-              placeholder="Min %"
-              value={filters.minDiscount}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="maxDiscount"
-              placeholder="Max %"
-              value={filters.maxDiscount}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            >
-              <option value="no" style={{color: 'black'}}>Sort By</option>
-              <option value="price" style={{color: 'black'}}>Price</option>
-              <option value="discount" style={{color: 'black'}}>Discount</option>
-              <option value="name" style={{color: 'black'}}>Name</option>
-            </select>
-          </div>
-          
-          <div>
-            <select
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            >
-              <option value="no" style={{color: 'black'}}>Order</option>
-              <option value="asc" style={{color: 'black'}}>Ascending</option>
-              <option value="desc" style={{color: 'black'}}>Descending</option>
-            </select>
-          </div>
+          <input
+            type="text"
+            name="search"
+            placeholder="Search products"
+            value={filters.search}
+            onChange={handleFilterChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20 col-span-2 md:col-span-1"
+          />
+          <input
+            type="number"
+            name="minPrice"
+            placeholder="Min Price"
+            value={filters.minPrice}
+            onChange={handleFilterChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          />
+          <input
+            type="number"
+            name="maxPrice"
+            placeholder="Max Price"
+            value={filters.maxPrice}
+            onChange={handleFilterChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          />
+          <input
+            type="number"
+            name="minDiscount"
+            placeholder="Min %"
+            value={filters.minDiscount}
+            onChange={handleFilterChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          />
+          <input
+            type="number"
+            name="maxDiscount"
+            placeholder="Max %"
+            value={filters.maxDiscount}
+            onChange={handleFilterChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          />
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="no">Sort By</option>
+            <option value="price">Price</option>
+            <option value="discount">Discount</option>
+            <option value="name">Name</option>
+          </select>
+          <select
+            value={order}
+            onChange={(e) => setOrder(e.target.value)}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="no">Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
         </div>
-        
+
         <div className="mt-4 flex justify-center">
           <button
             onClick={resetAllFilters}
@@ -225,7 +235,7 @@ const Product = () => {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
+        {filteredProducts?.map((product) => (
           <div
             key={product._id}
             className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300 p-4"
@@ -245,7 +255,6 @@ const Product = () => {
               </div>
             </Link>
 
-            {/* Info */}
             <div className="p-2">
               <p className="text-sm text-white">
                 {product.technologies.join(", ")}
@@ -257,7 +266,6 @@ const Product = () => {
                 {product.productName}
               </h2>
 
-              {/* Pricing */}
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-xl font-bold text-green-300">
                   ₹ {product.actualPrice}/-
@@ -274,7 +282,6 @@ const Product = () => {
                 )}
               </div>
 
-              {/* Buttons */}
               <div className="flex justify-between items-center mt-3">
                 <button
                   onClick={(e) => {

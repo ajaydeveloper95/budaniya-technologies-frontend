@@ -4,7 +4,7 @@ import BannerImg from "../../../public/assets/homeBanner.png";
 
 function Banner() {
   return (
-    <div className="flex flex-col-reverse md:flex-row w-full lg:flex-row max-w-fit px-6">
+    <div className="flex flex-col-reverse md:flex-row w-full lg:flex-row max-w-fit px-20">
       <div className="grid flex-grow card bg-base-300 md:w-1/2 rounded-box place-items-center">
         <h1>
           We are a team of tech enthusiasts and creative masterminds who strive

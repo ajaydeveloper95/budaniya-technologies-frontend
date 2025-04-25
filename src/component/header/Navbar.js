@@ -8,12 +8,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { apiGet } from "../../utils/http";
 
 const API_ENDPOINT = "/api/auth/logOut";
+const CATEGORIES_API = "https://api.budaniyatechnologies.com/api/categories/";
 
 function Navbar() {
-  const { cartCount } = useCart();
+  const { cartCount, category, setCategory } = useCart();
   const [show, setShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProductsDropdown, setShowProductsDropdown] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
@@ -22,16 +25,30 @@ function Navbar() {
 
   useEffect(() => {
     checkLoginStatus();
-
-    const handleStorageChange = () => {
-      checkLoginStatus();
-    };
-
+    const handleStorageChange = () => checkLoginStatus();
     window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await apiGet(CATEGORIES_API);
+        // Ensure we handle both array and object responses
+        const categoriesData = Array.isArray(response.data) 
+          ? response.data 
+          : response.data.categories || [];
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        toast.error("Failed to load product categories");
+        setCategories([]);
+      } finally {
+        setLoadingCategories(false);
+      }
     };
+
+    fetchCategories();
   }, []);
 
   const handleLogout = async () => {
@@ -44,9 +61,7 @@ function Navbar() {
       }
 
       await apiGet(API_ENDPOINT, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       localStorage.removeItem("accessToken");
@@ -61,6 +76,11 @@ function Navbar() {
     }
   };
 
+  // const generateCategorySlug = (_id) => {
+  //   return (_id);
+  //   // return (_id.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  // };
+
   return (
     <nav className="bg-black top-0 sticky z-10 border-gray-200 dark:bg-gray-900">
       <ToastContainer position="top-right" autoClose={2000} />
@@ -71,29 +91,23 @@ function Navbar() {
             Budaniya Technologies
           </span>
         </Link>
+        
         <button
           onClick={() => setShow(!show)}
           className="inline-flex items-center p-2 w-10 h-10 md:hidden"
+          aria-label="Toggle menu"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 17 14">
-            <path
-              stroke="currentColor"
-              strokeWidth="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
+            <path stroke="currentColor" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
           </svg>
         </button>
+
         <div className={`${show ? "" : "hidden"} w-full md:block md:w-auto`}>
           <ul className="flex flex-col md:flex-row md:space-x-8 text-white">
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/about">About</Link>
-            </li>
-            <li>
-              <Link href="/services">Services</Link>
-            </li>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/services">Services</Link></li>
+            
             <li 
               className="relative"
               onMouseEnter={() => setShowProductsDropdown(true)}
@@ -102,98 +116,96 @@ function Navbar() {
               <div className="flex items-center">
                 <Link 
                   href="/allProducts" 
-                  onClick={() => setShowProductsDropdown(!showProductsDropdown)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowProductsDropdown(!showProductsDropdown);
+                  }}
+                  className="flex items-center"
                 >
                   Products
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </Link>
-                <svg
-                  className="w-4 h-4 ml-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
               </div>
+              
               {showProductsDropdown && (
-                <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
-                  <Link
-                    href="/products/web-development"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShow(false)}
-                  >
-                    Web Development
-                  </Link>
-                  <Link
-                    href="/products/frontend"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShow(false)}
-                  >
-                    Frontend Development
-                  </Link>
-                  <Link
-                    href="/products/backend"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShow(false)}
-                  >
-                    Backend Development
-                  </Link>
-                  <Link
-                    href="/products/fullstack"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShow(false)}
-                  >
-                    Fullstack Development
-                  </Link>
-                  <Link
-                    href="/products/mobile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShow(false)}
-                  >
-                    Mobile Development
-                  </Link>
-                  <Link
-                    href="/allProducts"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold border-t border-gray-200"
-                    onClick={() => setShow(false)}
-                  >
-                    View All Products
-                  </Link>
+                <div className="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-20">
+                  {loadingCategories ? (
+                    <div className="px-4 py-2 text-sm text-gray-700">Loading categories...</div>
+                  ) : categories.length > 0 ? (
+                    <>
+                      {categories.map((category) => (
+                        <Link
+                        key={category._id}
+                        href={`/products?category=${category._id}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                          onClick={() => {
+                            setShow(false);
+                            setShowProductsDropdown(false);
+                            setCategory(category?.name)
+                          }}
+                        >
+                          {category.name}
+                        </Link>
+                      ))}
+                      <div className="border-t border-gray-200 mt-1">
+                        <Link
+                          href="/allProducts"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold"
+                          onClick={() => {
+                            setShow(false);
+                            setShowProductsDropdown(false);
+                            setCategory("all")
+                          }}
+                        >
+                          View All Products
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="px-4 py-2 text-sm text-gray-700">No categories available</div>
+                  )}
                 </div>
               )}
             </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
+            
+            <li><Link href="/contact">Contact</Link></li>
+            
             <li className="flex items-center">
-              <Link href="/cart" className="text-2xl">
+              <Link href="/cart" className="text-2xl flex items-center">
                 🛒
+                {cartCount > 0 && (
+                  <span className="ml-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
-              {cartCount > 0 && (
-                <span className="cart-badge bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full ml-1">
-                  {cartCount}
-                </span>
-              )}
             </li>
+            
             {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="bg-red-800 px-3 rounded text-white"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link href="/signIn">
-                <button className="bg-blue-800 px-3 rounded text-white">
-                  Sign In
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-800 px-3 py-1 rounded text-white hover:bg-red-700 transition-colors"
+                >
+                  Logout
                 </button>
-              </Link>
+              </li>
+            ) : (
+              <li>
+                <Link href="/signIn">
+                  <button className="bg-blue-800 px-3 py-1 rounded text-white hover:bg-blue-700 transition-colors">
+                    Sign In
+                  </button>
+                </Link>
+              </li>
             )}
           </ul>
         </div>

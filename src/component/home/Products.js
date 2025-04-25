@@ -135,7 +135,7 @@ const ProductDetails = () => {
     };
 
   return (
-    <div className="min-h-screen p-2 mt-10">
+    <div className="min-h-screen p-12 mt-10">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-white mb-2">Our Products</h1>
         <p className="text-white text-lg">
