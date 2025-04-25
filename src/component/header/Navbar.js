@@ -144,7 +144,7 @@ function Navbar() {
                       {categories.map((category) => (
                         <Link
                         key={category._id}
-                        href={`/products?category=${category._id}`}
+                        href={`/allProducts`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                           onClick={() => {
                             setShow(false);
@@ -177,6 +177,7 @@ function Navbar() {
             </li>
             
             <li><Link href="/contact">Contact</Link></li>
+            <li><Link href="/order">Order</Link></li>
             
             <li className="flex items-center">
               <Link href="/cart" className="text-2xl flex items-center">

@@ -9,7 +9,7 @@ const API_ENDPOINT =
   "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b";
 
 const Product = () => {
-  const { addToCart } = useCart();
+  const { addToCart, category } = useCart();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({
@@ -235,12 +235,12 @@ const Product = () => {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts?.map((product) => (
+        {filteredProducts?.filter(prod => category === 'all' || category === prod?.category?.name).map((product) => (
           <div
             key={product._id}
             className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300 p-4"
           >
-            <Link href={`/products/${product._id}`} className="block">
+            <Link href={`/products`} className="block">
               <div className="relative">
                 <img
                   src={product.images[0]}
