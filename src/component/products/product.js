@@ -22,6 +22,9 @@ const Product = () => {
   const [sortBy, setSortBy] = useState("no");
   const [order, setOrder] = useState("no");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+
   const router = useRouter();
   const { categoryId } = router.query;
 
@@ -53,14 +56,12 @@ const Product = () => {
   const applyFilters = () => {
     let result = [...products];
 
-    // Category filtering based on URL param
     if (categoryId && categoryId !== "all") {
       result = result.filter(
         (product) => product.category && product.category._id === categoryId
       );
     }
 
-    // Search filter
     if (filters.search) {
       result = result.filter(
         (product) =>
@@ -73,7 +74,6 @@ const Product = () => {
       );
     }
 
-    // Price filters
     if (filters.minPrice) {
       result = result.filter(
         (product) => product.actualPrice >= Number(filters.minPrice)
@@ -85,7 +85,6 @@ const Product = () => {
       );
     }
 
-    // Discount filters
     if (filters.minDiscount) {
       result = result.filter(
         (product) => product.discount >= Number(filters.minDiscount)
@@ -97,7 +96,6 @@ const Product = () => {
       );
     }
 
-    // Sorting
     if (sortBy !== "no") {
       result.sort((a, b) => {
         if (sortBy === "price") {
@@ -118,6 +116,7 @@ const Product = () => {
     }
 
     setFilteredProducts(result);
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
   const resetAllFilters = () => {
@@ -130,6 +129,7 @@ const Product = () => {
     });
     setSortBy("no");
     setOrder("no");
+    setCurrentPage(1);
   };
 
   const handleAddToCart = async (product) => {
@@ -139,13 +139,31 @@ const Product = () => {
         quantity: 1,
       });
 
-      addToCart(product); // Update local cart
+      addToCart(product);
       toast.success("Item added to cart successfully!");
       console.log("Updated cart:", res.data.cart);
     } catch (err) {
       toast.error("Failed to add item to cart.");
       console.error("Add to cart error:", err);
     }
+  };
+
+  // Pagination logic
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts
+    ?.filter((prod) => category === "all" || category === prod?.category?.name)
+    .slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(
+    filteredProducts.filter(
+      (prod) => category === "all" || category === prod?.category?.name
+    ).length / productsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -159,7 +177,7 @@ const Product = () => {
         </p>
       </div>
 
-      {/* Filters UI */}
+      {/* Filters */}
       <div className="bg-white/10 p-4 rounded-lg mb-8">
         <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
           <input
@@ -235,7 +253,7 @@ const Product = () => {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts?.filter(prod => category === 'all' || category === prod?.category?.name).map((product) => (
+        {currentProducts.map((product) => (
           <div
             key={product._id}
             className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300 p-4"
@@ -303,6 +321,25 @@ const Product = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-10 space-x-2">
+          {[...Array(totalPages).keys()].map((num) => (
+            <button
+              key={num + 1}
+              onClick={() => handlePageChange(num + 1)}
+              className={`px-4 py-2 rounded ${
+                currentPage === num + 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-black"
+              }`}
+            >
+              {num + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
