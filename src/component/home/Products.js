@@ -239,10 +239,12 @@ const ProductDetails = () => {
 
       <Slider {...settings}>
         {filteredProducts.map((product) => (
+                <Link href={`/products/${product._id}`}>
+
           <div key={product._id}>
-            <Link href={`/product/${product._id}`} className="block">
+            <Link href={`/products/${product._id}`} className="block">
               <div className="size">
-                <div className="bg-transparent border border-white/20 rounded-lg shadow-md overflow-hidden hover:shadow-white transition duration-300 p-4">
+                <div className="bg-transparent border border-white/20 rounded-lg shadow-md overflow-hidden hover:shadow-white transition duration-300">
                   <Link href={`/products/${product._id}`}>
                     <div className="relative">
                       <img
@@ -309,6 +311,7 @@ const ProductDetails = () => {
               </div>
             </Link>
           </div>
+          </Link>
         ))}
       </Slider>
     </div>
