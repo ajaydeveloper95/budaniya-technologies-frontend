@@ -38,7 +38,7 @@ const ProductDetails = () => {
     const fetchProducts = async () => {
       try {
         const res = await apiGet(
-          "api/product/getproducts?referenceWebsite=661ed848d4205b13dba74f4b"
+          `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`
         );
         setProducts(res.data.products);
       } catch (err) {
