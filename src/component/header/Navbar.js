@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../CartContext";
@@ -12,11 +12,11 @@ const CATEGORIES_API = "https://api.budaniyatechnologies.com/api/categories/";
 
 function Navbar() {
   const { cartCount } = useCart();
-  const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [openCategory, setOpenCategory] = useState(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -31,7 +31,6 @@ function Navbar() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // Fetch categories with subcategories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -47,6 +46,19 @@ function Navbar() {
       }
     };
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenCategory(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -68,6 +80,10 @@ function Navbar() {
     }
   };
 
+  const toggleCategory = (categoryId) => {
+    setOpenCategory(openCategory === categoryId ? null : categoryId);
+  };
+
   return (
     <nav className="bg-black sticky top-0 z-50 dark:bg-gray-900">
       <ToastContainer position="top-right" autoClose={2000} />
@@ -82,14 +98,10 @@ function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">
-          <Link
-            href="/allProducts"
-            className="text-gray-300 hover:text-white"
-          >
+          <Link href="/allProducts" className="text-gray-300 hover:text-white">
             All Items
           </Link>
 
-          {/* Search bar */}
           <div className="relative">
             <input
               type="text"
@@ -162,7 +174,7 @@ function Navbar() {
       </div>
 
       {/* Categories Section */}
-      <div className="bg-gray-800 py-2 px-4">
+      <div className="bg-gray-800 py-2 px-4" ref={dropdownRef}>
         <div className="max-w-7xl mx-auto">
           <ul className="flex flex-wrap justify-center space-x-6 text-white">
             {loadingCategories ? (
@@ -171,11 +183,12 @@ function Navbar() {
               categories.map((cat) => (
                 <li
                   key={cat._id}
-                  className="relative group"
-                  onMouseEnter={() => setHoveredCategory(cat._id)}
-                  onMouseLeave={() => setHoveredCategory(null)}
+                  className="relative"
                 >
-                  <button className="hover:text-gray-300 py-1 px-2 font-medium flex items-center">
+                  <button 
+                    onClick={() => toggleCategory(cat._id)}
+                    className="hover:text-gray-300 py-1 px-2 font-medium flex items-center"
+                  >
                     {cat.name}
                     {cat.subcat?.length > 0 && (
                       <svg
@@ -195,7 +208,7 @@ function Navbar() {
                   </button>
 
                   {/* Dropdown for subcategories */}
-                  {cat.subcat?.length > 0 && hoveredCategory === cat._id && (
+                  {cat.subcat?.length > 0 && openCategory === cat._id && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {cat.subcat.map((sub) => (
@@ -203,6 +216,7 @@ function Navbar() {
                             key={sub._id}
                             href={`/allProducts?subcategory=${sub.name}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setOpenCategory(null)}
                           >
                             {sub.name}
                           </Link>
