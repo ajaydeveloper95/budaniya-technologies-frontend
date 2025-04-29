@@ -28,6 +28,33 @@ function Banner() {
             We tailor our services to deliver measurable results through
             cutting-edge solutions.
           </p>
+
+          {/* Search Bar Styled Like Image */}
+          <div className="bg-white rounded-lg shadow-md flex items-center overflow-hidden w-full">
+            <input
+              type="text"
+              placeholder="e.g. responsive WordPress"
+              className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
+            />
+            <button className="flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 font-semibold transition duration-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+                />
+              </svg>
+              Search
+            </button>
+          </div>
+
           <Link href="/services">
             <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg transition">
               Explore Services

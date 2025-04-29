@@ -16,6 +16,7 @@ function Navbar() {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [openCategory, setOpenCategory] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -27,7 +28,6 @@ function Navbar() {
       setIsLoggedIn(!!updatedToken);
     };
     window.addEventListener("storage", handleStorageChange);
-
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
@@ -54,11 +54,8 @@ function Navbar() {
         setOpenCategory(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
@@ -92,44 +89,33 @@ function Navbar() {
       <div className="flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/" className="flex items-center space-x-3">
           <Image src={Logo} className="h-8" height={40} alt="Logo" />
-          <span className="self-center md:text-lg text-base font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center md:text-lg text-base font-semibold whitespace-nowrap dark:text-white text-white">
             Budaniya Technologies
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-6">
-          <Link href="/allProducts" className="text-gray-300 hover:text-white">
-            All Items
-          </Link>
+        {/* Hamburger Button */}
+        <button
+          className="md:hidden text-white text-2xl"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          ☰
+        </button>
 
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search"
-              className="pl-10 pr-4 py-1.5 w-64 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-            <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-        </div>
-
-        <ul className="flex flex-col md:flex-row md:space-x-8 text-white">
+        {/* Main Menu */}
+        <ul
+          className={`${
+            isMobileMenuOpen ? "flex" : "hidden"
+          } flex-col md:flex md:flex-row md:space-x-8 text-white w-full md:w-auto mt-4 md:mt-0`}
+        >
           <li className="hover:text-gray-300">
             <Link href="/">Home</Link>
           </li>
           <li className="hover:text-gray-300">
             <Link href="/about">About</Link>
+          </li>
+          <li className="hover:text-gray-300">
+            <Link href="/allProducts">Product</Link>
           </li>
           <li className="hover:text-gray-300">
             <Link href="/services">Services</Link>
@@ -156,7 +142,7 @@ function Navbar() {
             <li>
               <button
                 onClick={handleLogout}
-                className="bg-red-800 px-3 py-1 rounded text-white hover:bg-red-700 transition-colors"
+                className="bg-red-800 px-3 py-1 rounded text-white hover:bg-red-700 transition-colors mt-2 md:mt-0"
               >
                 Logout
               </button>
@@ -164,7 +150,7 @@ function Navbar() {
           ) : (
             <li>
               <Link href="/signIn">
-                <button className="bg-blue-800 px-3 py-1 rounded text-white hover:bg-blue-700 transition-colors">
+                <button className="bg-blue-800 px-3 py-1 rounded text-white hover:bg-blue-700 transition-colors mt-2 md:mt-0">
                   Sign In
                 </button>
               </Link>
@@ -174,59 +160,56 @@ function Navbar() {
       </div>
 
       {/* Categories Section */}
-      <div className="bg-gray-800 py-2 px-4" ref={dropdownRef}>
+      <div className="bg-gray-800 py-2 " ref={dropdownRef}>
         <div className="max-w-7xl mx-auto">
-          <ul className="flex flex-wrap justify-center space-x-6 text-white">
-            {loadingCategories ? (
-              <li>Loading Categories...</li>
-            ) : (
-              categories.map((cat) => (
-                <li
-                  key={cat._id}
-                  className="relative"
-                >
-                  <button 
-                    onClick={() => toggleCategory(cat._id)}
-                    className="hover:text-gray-300 py-1 px-2 font-medium flex items-center"
-                  >
-                    {cat.name}
-                    {cat.subcat?.length > 0 && (
-                      <svg
-                        className="ml-1 h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    )}
-                  </button>
+          <ul className="flex flex-wrap space-x-4 text-white">
+          {loadingCategories ? (
+  <li>Loading Categories...</li>
+) : (
+  categories.slice(0, 10).map((cat) => (
+    <li key={cat._id} className="relative">
+      <button
+        onClick={() => toggleCategory(cat._id)}
+        className="hover:text-gray-300 py-1 px-2 font-medium flex items-center"
+      >
+        {cat.name}
+        {cat.subcat?.length > 0 && (
+          <svg
+            className="ml-1 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        )}
+      </button>
 
-                  {/* Dropdown for subcategories */}
-                  {cat.subcat?.length > 0 && openCategory === cat._id && (
-                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-                      <div className="py-1">
-                        {cat.subcat.map((sub) => (
-                          <Link
-                            key={sub._id}
-                            href={`/allProducts?subcategory=${sub.name}`}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => setOpenCategory(null)}
-                          >
-                            {sub.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </li>
-              ))
-            )}
+      {/* Dropdown for subcategories */}
+      {cat.subcat?.length > 0 && openCategory === cat._id && (
+        <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+          <div className="py-1">
+            {cat.subcat.map((sub) => (
+              <Link
+                key={sub._id}
+                href={`/allProducts?subcategory=${sub.name}`}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setOpenCategory(null)}
+              >
+                {sub.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </li>
+  ))
+)}
           </ul>
         </div>
       </div>
