@@ -5,7 +5,8 @@
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 body {
-  background-color: rgba(19, 7, 46, 255);
+  /* background-color: rgba(19, 7, 46, 255); */
+  background-image: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e);
   color: white;
   overflow-x: hidden;
 }

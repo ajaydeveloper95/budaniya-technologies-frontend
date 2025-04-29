@@ -1,45 +1,52 @@
-import Image from "next/image";
 import React from "react";
-import BannerImg from "../../../public/assets/homeBanner.png"; // Replace with your tech-style image
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 function Banner() {
   return (
-    <div className=" py-12 px-4 md:px-20 text-white">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-7xl mx-auto">
+    <section className="bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white py-16 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-10">
         {/* Left Text Section */}
-        <div className="md:w-1/2 space-y-6 text-left">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+        <motion.div
+          className="md:w-1/2 space-y-6"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
             Empowering Your Vision with <br />
+<<<<<<< HEAD
+            <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+              Innovative Tech Solutions
+            </span>
+=======
             <span className="text-blue-300">Innovative Tech Solutions</span>
+>>>>>>> dc8cccdbe4330e71bacc7dfcb3e4ec055ba7f62c
           </h1>
-          <p className="text-base md:text-lg leading-relaxed text-gray-200">
-            We are a team of tech enthusiasts and creative masterminds who
-            strive to bring our client&apos;s visions to life. Our mission is to
-            help businesses achieve their goals through effective technology
-            solutions.
+          <p className="text-gray-300 text-lg">
+            We are a team of tech enthusiasts and creative masterminds committed
+            to turning your ideas into impactful digital experiences.
           </p>
-          <p className="text-base md:text-lg leading-relaxed text-gray-300">
+          <p className="text-gray-400 text-md">
             At{" "}
             <span className="font-semibold text-blue-400">
               Budaniya Technologies
             </span>
-            , we believe collaboration and innovation are the keys to success.
-            We tailor our services to deliver measurable results through
-            cutting-edge solutions.
+            , we focus on collaboration and innovation to deliver measurable
+            results with cutting-edge technology.
           </p>
 
-          {/* Search Bar Styled Like Image */}
-          <div className="bg-white rounded-lg shadow-md flex items-center overflow-hidden w-full">
+          {/* Search Bar */}
+          <div className="relative w-full">
             <input
               type="text"
-              placeholder="e.g. responsive WordPress"
-              className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
+              placeholder="Search services (e.g., responsive WordPress)"
+              className="w-full px-5 py-3 pr-16 rounded-xl bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm placeholder-gray-500 transition"
             />
-            <button className="flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 font-semibold transition duration-300">
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 text-white px-4 py-2 rounded-lg shadow-md transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -51,29 +58,41 @@ function Banner() {
                   d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
                 />
               </svg>
-              Search
             </button>
           </div>
 
           <Link href="/services">
-            <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg transition">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-6 inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-xl text-white font-medium px-6 py-3 rounded-xl transition shadow-md"
+            >
               Explore Services
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Right Image Section */}
-        <div className="md:w-1/2 mb-10 md:mb-0 flex justify-center items-center">
-          <Image
-            src={BannerImg}
-            alt="Budaniya Tech Banner"
-            className="rounded-xl shadow-lg"
-            width={500}
-            height={400}
-          />
-        </div>
+        {/* Right Video Section */}
+        <motion.div
+          className="md:w-1/2 flex justify-center items-center"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div className="relative w-[300px] md:w-[450px] rounded-2xl overflow-hidden shadow-2xl">
+            <video
+              src="/assets/Heo1.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-auto object-cover rounded-2xl"
+            />
+            <div className="absolute inset-0 bg-black/40 rounded-2xl" />
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
 
