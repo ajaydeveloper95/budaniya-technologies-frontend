@@ -11,7 +11,6 @@ function Banner() {
         <div className="md:w-1/2 space-y-6 text-left">
           <h1 className="text-3xl md:text-4xl font-bold leading-tight">
             Empowering Your Vision with <br />
-            hello hello
             <span className="text-blue-300">Innovative Tech Solutions</span>
           </h1>
           <p className="text-base md:text-lg leading-relaxed text-gray-200">
