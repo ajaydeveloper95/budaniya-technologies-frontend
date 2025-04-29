@@ -5,6 +5,7 @@ import Link from "next/link";
 import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import { useCart } from "../CartContext";
+import { motion } from "framer-motion";
 
 const settings = {
   infinite: true,
@@ -12,7 +13,7 @@ const settings = {
   slidesToShow: 4,
   slidesToScroll: 1,
   autoplay: true,
-  autoplaySpeed: 3000,
+  autoplaySpeed: 3500,
   responsive: [
     { breakpoint: 1024, settings: { slidesToShow: 3 } },
     { breakpoint: 768, settings: { slidesToShow: 2 } },
@@ -22,40 +23,33 @@ const settings = {
 
 const ProductDetails = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    minPrice: "",
+    maxPrice: "",
+    minDiscount: "",
+    maxDiscount: "",
+  });
+  const [sortBy, setSortBy] = useState("no");
+  const [order, setOrder] = useState("no");
   const { addToCart } = useCart();
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [filters, setFilters] = useState({
-      search: "",
-      minPrice: "",
-      maxPrice: "",
-      minDiscount: "",
-      maxDiscount: "",
-    });
-    const [sortBy, setSortBy] = useState("no");
-    const [order, setOrder] = useState("no");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await apiGet(
-          `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`
-        );
+        const res = await apiGet(`api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`);
         setProducts(res.data.products);
       } catch (err) {
         console.error("Error fetching products:", err);
       }
     };
-
     fetchProducts();
   }, []);
 
   const handleAddToCart = async (productId) => {
     try {
-      const res = await apiPost("api/cart/add", {
-        productId,
-        quantity: 1,
-      });
-
+      const res = await apiPost("api/cart/add", { productId, quantity: 1 });
       toast.success("Item added to cart successfully!");
       console.log("Updated cart:", res.data.cart);
     } catch (err) {
@@ -64,254 +58,146 @@ const ProductDetails = () => {
     }
   };
 
-    useEffect(() => {
-      applyFilters();
-    }, [filters, sortBy, order, products]);
+  useEffect(() => {
+    applyFilters();
+  }, [filters, sortBy, order, products]);
 
-    const handleFilterChange = (e) => {
-      const { name, value } = e.target;
-      setFilters(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    };
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const applyFilters = () => {
-      let result = [...products];
-      
-      // Apply search filter
-      if (filters.search) {
-        result = result.filter(product => 
-          product.productName.toLowerCase().includes(filters.search.toLowerCase()) ||
-          product.description.toLowerCase().includes(filters.search.toLowerCase())
-        );
-      }
-      
-      // Apply price filters
-      if (filters.minPrice) {
-        result = result.filter(product => product.actualPrice >= Number(filters.minPrice));
-      }
-      if (filters.maxPrice) {
-        result = result.filter(product => product.actualPrice <= Number(filters.maxPrice));
-      }
-      
-      // Apply discount filters
-      if (filters.minDiscount) {
-        result = result.filter(product => product.discount >= Number(filters.minDiscount));
-      }
-      if (filters.maxDiscount) {
-        result = result.filter(product => product.discount <= Number(filters.maxDiscount));
-      }
-      
-      // Apply sorting
-      if (sortBy !== "no") {
-        result.sort((a, b) => {
-          if (sortBy === "price") {
-            return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
-          } else if (sortBy === "discount") {
-            return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
-          } else if (sortBy === "name") {
-            return order === "asc" 
-              ? a.productName.localeCompare(b.productName) 
-              : b.productName.localeCompare(a.productName);
-          }
-          return 0;
-        });
-      }
-      
-      setFilteredProducts(result);
-    };
-  
-    const resetAllFilters = () => {
-      setFilters({
-        search: "",
-        minPrice: "",
-        maxPrice: "",
-        minDiscount: "",
-        maxDiscount: "",
+  const applyFilters = () => {
+    let result = [...products];
+    if (filters.search) {
+      result = result.filter(
+        (p) =>
+          p.productName.toLowerCase().includes(filters.search.toLowerCase()) ||
+          p.description.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+    if (filters.minPrice) result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
+    if (filters.maxPrice) result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
+    if (filters.minDiscount) result = result.filter((p) => p.discount >= Number(filters.minDiscount));
+    if (filters.maxDiscount) result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
+    if (sortBy !== "no") {
+      result.sort((a, b) => {
+        if (sortBy === "price") return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
+        if (sortBy === "discount") return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
+        if (sortBy === "name") return order === "asc" ? a.productName.localeCompare(b.productName) : b.productName.localeCompare(a.productName);
+        return 0;
       });
-      setSortBy("no");
-      setOrder("no");
-    };
+    }
+    setFilteredProducts(result);
+  };
+
+  const resetAllFilters = () => {
+    setFilters({ search: "", minPrice: "", maxPrice: "", minDiscount: "", maxDiscount: "" });
+    setSortBy("no");
+    setOrder("no");
+  };
 
   return (
-    <div className="min-h-screen p-12 mt-10">
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-white mb-2">Our Products</h1>
-        <p className="text-white text-lg">
+    <div className="min-h-screen px-6 md:px-12 py-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
+      <div className="text-center mb-12">
+        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-4xl font-extrabold text-white mb-2">
+          Our Products
+        </motion.h1>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-white text-lg">
           Weekly Bestsellers Handpicked for You
-        </p>
+        </motion.p>
       </div>
 
-            {/* Filters */}
-            <div className="bg-white/10 p-4 rounded-lg mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
-          <div className="col-span-2 md:col-span-1">
+      {/* Filters */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="bg-white/10 p-6 rounded-xl shadow-md backdrop-blur-md mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
+          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map((name, idx) => (
             <input
-              type="text"
-              name="search"
-              placeholder="Search products"
-              value={filters.search}
+              key={name}
+              type={name.includes("Price") || name.includes("Discount") ? "number" : "text"}
+              name={name}
+              placeholder={name.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}
+              value={filters[name]}
               onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+              className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
             />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="minPrice"
-              placeholder="Min Price"
-              value={filters.minPrice}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="maxPrice"
-              placeholder="Max Price"
-              value={filters.maxPrice}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="minDiscount"
-              placeholder="Min %"
-              value={filters.minDiscount}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <input
-              type="number"
-              name="maxDiscount"
-              placeholder="Max %"
-              value={filters.maxDiscount}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            />
-          </div>
-          
-          <div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            >
-              <option value="no" style={{color: 'black'}}>Sort By</option>
-              <option value="price" style={{color: 'black'}}>Price</option>
-              <option value="discount" style={{color: 'black'}}>Discount</option>
-              <option value="name" style={{color: 'black'}}>Name</option>
-            </select>
-          </div>
-          
-          <div>
-            <select
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
-              className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-            >
-              <option value="no" style={{color: 'black'}}>Order</option>
-              <option value="asc" style={{color: 'black'}}>Ascending</option>
-              <option value="desc" style={{color: 'black'}}>Descending</option>
-            </select>
-          </div>
-        </div>
-        
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={resetAllFilters}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          ))}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
           >
+            <option value="no">Sort By</option>
+            <option value="price">Price</option>
+            <option value="discount">Discount</option>
+            <option value="name">Name</option>
+          </select>
+          <select
+            value={order}
+            onChange={(e) => setOrder(e.target.value)}
+            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
+          >
+            <option value="no">Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+        <div className="mt-5 flex justify-center">
+          <button onClick={resetAllFilters} className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
             Reset All
           </button>
         </div>
-      </div>
+      </motion.div>
 
       <Slider {...settings}>
         {filteredProducts.map((product) => (
-                <Link href={`/products/${product._id}`}>
-
-          <div key={product._id}>
-            <Link href={`/products/${product._id}`} className="block">
-              <div className="size">
-                <div className="bg-transparent border border-white/20 rounded-lg shadow-md overflow-hidden hover:shadow-white transition duration-300">
-                  <Link href={`/products/${product._id}`}>
-                    <div className="relative">
-                      <img
-                        src={product.images[0]}
-                        alt={product.productName}
-                        className="w-full h-60 object-cover rounded"
-                      />
-                      {product.discount > 0 && (
-                        <div className="absolute top-2 right-2 bg-red-400 text-white text-xs font-bold px-2 py-0.5 rounded">
-                          {product.discount}% OFF
-                        </div>
-                      )}
+          <motion.div key={product._id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <Link href={`/products/${product._id}`} className="block p-2">
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <div className="relative">
+                  <img
+                    src={product.images[0]}
+                    alt={product.productName}
+                    className="w-full h-60 object-cover rounded-t-lg"
+                  />
+                  {product.discount > 0 && (
+                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                      {product.discount}% OFF
                     </div>
-                  </Link>
-
-                  <div className="p-4">
-                    <p className="text-sm text-white">
-                      {product.technologies?.join(", ")}
-                    </p>
-                    <p className="text-xs text-blue-300 font-semibold mb-2">
-                      {product.description}
-                    </p>
-                    <h2 className="text-lg font-bold text-white mb-1">
-                      {product.productName}
-                    </h2>
-
-                    <div className="flex items-center space-x-2 mb-1">
-                      <span className="text-xl font-bold text-green-300">
-                        ₹ {product.actualPrice}/-
-                      </span>
-                      {product.price > product.actualPrice && (
-                        <>
-                          <span className="line-through text-gray-400 text-sm">
-                            ₹ {product.price}/-
-                          </span>
-                          <span className="text-sm text-red-400 font-medium">
-                            Save ₹ {product.price - product.actualPrice}/-
-                          </span>
-                        </>
-                      )}
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleAddToCart(product._id);
-                          addToCart(product);
-                        }}
-                        className="bg-white text-black px-3 py-1 rounded hover:bg-gray-300 text-lg"
-                      >
-                        🛒
-                      </button>
-
-                      <Link
-                        href={`/products/${product._id}`}
-                        className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm"
-                      >
-                        Buy Now
-                      </Link>
-                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <p className="text-xs text-white mb-1">{product.technologies?.join(", ")}</p>
+                  <p className="text-sm text-blue-200 mb-2">{product.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-1">{product.productName}</h3>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl font-semibold text-green-300">₹{product.actualPrice}/-</span>
+                    {product.price > product.actualPrice && (
+                      <>
+                        <span className="line-through text-gray-400 text-sm">₹{product.price}/-</span>
+                        <span className="text-sm text-red-400">Save ₹{product.price - product.actualPrice}/-</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAddToCart(product._id);
+                        addToCart(product);
+                      }}
+                      className="bg-white text-black px-3 py-1 rounded hover:bg-gray-300 text-lg"
+                    >
+                      🛒
+                    </button>
+                    <Link href={`/products/${product._id}`} className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">
+                      Buy Now
+                    </Link>
                   </div>
                 </div>
               </div>
             </Link>
-          </div>
-          </Link>
+          </motion.div>
         ))}
       </Slider>
     </div>
