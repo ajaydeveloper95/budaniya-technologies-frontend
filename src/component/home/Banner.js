@@ -15,13 +15,6 @@ function Banner() {
         >
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
             Empowering Your Vision with <br />
-<<<<<<< HEAD
-            <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-              Innovative Tech Solutions
-            </span>
-=======
-            <span className="text-blue-300">Innovative Tech Solutions</span>
->>>>>>> dc8cccdbe4330e71bacc7dfcb3e4ec055ba7f62c
           </h1>
           <p className="text-gray-300 text-lg">
             We are a team of tech enthusiasts and creative masterminds committed
