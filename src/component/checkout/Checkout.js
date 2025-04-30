@@ -34,7 +34,7 @@ const router = useRouter()
 
   const handleSubmit = () => {
     const products = cart?.items?.map(item => ({
-      product: item.product._id,
+      product: item.product?._id,
       quantity: item.quantity,
       total: item.total,
       price: item.price
@@ -52,7 +52,7 @@ const router = useRouter()
       products: products,
       shippingAddress: shippingDetails,
       totalAmount: cart?.totalAmount,
-      status: "pending", // Assuming you want to start with "pending" status
+      status: "pending", 
       paymentStatus: "pending", // Assuming the payment is also pending
       type: "cart" // Assuming this is the type for this order
     };

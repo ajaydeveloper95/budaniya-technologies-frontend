@@ -71,60 +71,64 @@ const CartDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.items.map((item, index) => (
-                <tr key={index} className="border-t">
-                  <td className="p-3">
-                    <img
-                      src={item.product.images[0]}
-                      alt={item.product.productName}
-                      className="w-14 h-14 object-cover rounded"
-                    />
-                  </td>
-                  <td className="p-3">{item.product.productName}</td>
-                  <td className="p-3">₹{item.product.price.toFixed(2)}</td>
-                  <td className="p-3 flex items-center justify-between">
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(
-                          item.product._id,
-                          item.quantity - 1,
-                          item.product.actualPrice
-                        )
-                      }
-                      className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
-                      disabled={item.quantity <= 1}
-                    >
-                      -
-                    </button>
+              {cart.items
+                .filter((item) => item.product) // skip null product
+                .map((item, index) => (
+                  <tr key={index} className="border-t">
+                    <td className="p-3">
+                      <img
+                        src={item.product?.images?.[0] || "/placeholder.jpg"}
+                        alt={item.product?.productName || "No Product"}
+                        className="w-14 h-14 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-3">
+                      {item.product?.productName || "Product Removed"}
+                    </td>
+                    <td className="p-3">₹{item.price?.toFixed(2)}</td>
+                    <td className="p-3 flex items-center justify-between">
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(
+                            item.product._id,
+                            item.quantity - 1,
+                            item.price
+                          )
+                        }
+                        className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
+                        disabled={item.quantity <= 1}
+                      >
+                        -
+                      </button>
 
-                    <span className="mx-2">{item.quantity}</span>
+                      <span className="mx-2">{item.quantity}</span>
 
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(
-                          item.product._id,
-                          item.quantity + 1,
-                          item.product.actualPrice
-                        )
-                      }
-                      className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
-                    >
-                      +
-                    </button>
-                  </td>
-                  <td className="p-3 font-semibold">
-                    ₹{item.total.toFixed(2)}
-                  </td>
-                  <td className="p-3">
-                    <button
-                      onClick={() => handleRemove(item.product._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(
+                            item.product._id,
+                            item.quantity + 1,
+                            item.price
+                          )
+                        }
+                        className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
+                      >
+                        +
+                      </button>
+                    </td>
+                    <td className="p-3 font-semibold">
+                      ₹{item.total?.toFixed(2)}
+                    </td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => handleRemove(item.product._id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
