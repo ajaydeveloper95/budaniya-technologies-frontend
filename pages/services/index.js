@@ -8,7 +8,7 @@ function index() {
         <div className="text-center my-4 text-3xl">
           <h1>Service</h1>
         </div>
-        <p>
+        <p className="text-center">
           We are a team of tech enthusiasts and creative masterminds who strive
           to bring our client's visions to life. Our mission is to help
           businesses achieve their goals through effective Technology Solutions.{" "}
