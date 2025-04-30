@@ -38,7 +38,9 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await apiGet(`api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`);
+        const res = await apiGet(
+          `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`
+        );
         setProducts(res.data.products);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -76,15 +78,28 @@ const ProductDetails = () => {
           p.description.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
-    if (filters.minPrice) result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
-    if (filters.maxPrice) result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
-    if (filters.minDiscount) result = result.filter((p) => p.discount >= Number(filters.minDiscount));
-    if (filters.maxDiscount) result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
+    if (filters.minPrice)
+      result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
+    if (filters.maxPrice)
+      result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
+    if (filters.minDiscount)
+      result = result.filter((p) => p.discount >= Number(filters.minDiscount));
+    if (filters.maxDiscount)
+      result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
     if (sortBy !== "no") {
       result.sort((a, b) => {
-        if (sortBy === "price") return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
-        if (sortBy === "discount") return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
-        if (sortBy === "name") return order === "asc" ? a.productName.localeCompare(b.productName) : b.productName.localeCompare(a.productName);
+        if (sortBy === "price")
+          return order === "asc"
+            ? a.actualPrice - b.actualPrice
+            : b.actualPrice - a.actualPrice;
+        if (sortBy === "discount")
+          return order === "asc"
+            ? a.discount - b.discount
+            : b.discount - a.discount;
+        if (sortBy === "name")
+          return order === "asc"
+            ? a.productName.localeCompare(b.productName)
+            : b.productName.localeCompare(a.productName);
         return 0;
       });
     }
@@ -92,7 +107,13 @@ const ProductDetails = () => {
   };
 
   const resetAllFilters = () => {
-    setFilters({ search: "", minPrice: "", maxPrice: "", minDiscount: "", maxDiscount: "" });
+    setFilters({
+      search: "",
+      minPrice: "",
+      maxPrice: "",
+      minDiscount: "",
+      maxDiscount: "",
+    });
     setSortBy("no");
     setOrder("no");
   };
@@ -100,28 +121,51 @@ const ProductDetails = () => {
   return (
     <div className="min-h-screen px-6 md:px-12 py-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
       <div className="text-center mb-12">
-        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-4xl font-extrabold text-white mb-2">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-extrabold text-white mb-2"
+        >
           Our Products
         </motion.h1>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-white text-lg">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-white text-lg"
+        >
           Weekly Bestsellers Handpicked for You
         </motion.p>
       </div>
 
       {/* Filters */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="bg-white/10 p-6 rounded-xl shadow-md backdrop-blur-md mb-10">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="bg-white/10 p-6 rounded-xl shadow-md backdrop-blur-md mb-10"
+      >
         <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
-          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map((name, idx) => (
-            <input
-              key={name}
-              type={name.includes("Price") || name.includes("Discount") ? "number" : "text"}
-              name={name}
-              placeholder={name.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}
-              value={filters[name]}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
-            />
-          ))}
+          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map(
+            (name, idx) => (
+              <input
+                key={name}
+                type={
+                  name.includes("Price") || name.includes("Discount")
+                    ? "number"
+                    : "text"
+                }
+                name={name}
+                placeholder={name
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (str) => str.toUpperCase())}
+                value={filters[name]}
+                onChange={handleFilterChange}
+                className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
+              />
+            )
+          )}
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -143,7 +187,10 @@ const ProductDetails = () => {
           </select>
         </div>
         <div className="mt-5 flex justify-center">
-          <button onClick={resetAllFilters} className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
+          <button
+            onClick={resetAllFilters}
+            className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition"
+          >
             Reset All
           </button>
         </div>
@@ -151,7 +198,12 @@ const ProductDetails = () => {
 
       <Slider {...settings}>
         {filteredProducts.map((product) => (
-          <motion.div key={product._id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+          <motion.div
+            key={product._id}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
             <Link href={`/products/${product._id}`} className="block p-2">
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
                 <div className="relative">
@@ -167,15 +219,30 @@ const ProductDetails = () => {
                   )}
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-white mb-1">{product.technologies?.join(", ")}</p>
-                  <p className="text-sm text-blue-200 mb-2">{product.description}</p>
-                  <h3 className="text-lg font-bold text-white mb-1">{product.productName}</h3>
+                <h3 className="text-lg font-bold text-white mb-1">
+                    {product.productName}
+                  </h3>
+                  <p className="text-sm text-blue-200 mb-2">
+                    {product.description.length > 150
+                      ? `${product.description.slice(0, 150)}...`
+                      : product.description}
+                  </p>
+                 
+                  <p className="text-md text-white mb-1">
+                    {product.technologies?.join(", ")}
+                  </p>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xl font-semibold text-green-300">₹{product.actualPrice}/-</span>
+                    <span className="text-xl font-semibold text-green-300">
+                      ₹{product.actualPrice}/-
+                    </span>
                     {product.price > product.actualPrice && (
                       <>
-                        <span className="line-through text-gray-400 text-sm">₹{product.price}/-</span>
-                        <span className="text-sm text-red-400">Save ₹{product.price - product.actualPrice}/-</span>
+                        <span className="line-through text-gray-400 text-sm">
+                          ₹{product.price}/-
+                        </span>
+                        <span className="text-sm text-red-400">
+                          Save ₹{product.price - product.actualPrice}/-
+                        </span>
                       </>
                     )}
                   </div>
@@ -190,7 +257,10 @@ const ProductDetails = () => {
                     >
                       🛒
                     </button>
-                    <Link href={`/products/${product._id}`} className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">
+                    <Link
+                      href={`/products/${product._id}`}
+                      className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm"
+                    >
                       Buy Now
                     </Link>
                   </div>

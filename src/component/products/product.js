@@ -5,8 +5,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const API_ENDPOINT =
-  `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`;
+const API_ENDPOINT = `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`;
 
 const Product = () => {
   const { addToCart } = useCart();
@@ -274,15 +273,17 @@ const Product = () => {
             </Link>
 
             <div className="p-2">
-              <p className="text-sm text-white">
-                {product.technologies?.join(", ")}
-              </p>
-              <p className="text-xs text-blue-300 font-semibold mb-2">
-                {product.description}
-              </p>
               <h2 className="text-lg font-bold text-white mb-1">
                 {product.productName}
               </h2>
+              <p className="text-sm text-blue-200 mb-2">
+                {product.description.length > 150
+                  ? `${product.description.slice(0, 150)}...`
+                  : product.description}
+              </p>
+              <p className="text-sm text-white">
+                {product.technologies?.join(", ")}
+              </p>
 
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-xl font-bold text-green-300">
