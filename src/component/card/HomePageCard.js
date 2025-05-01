@@ -50,7 +50,7 @@ function HomePageCard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 ">
         {blogPosts.map((post) => (
-          <div key={post.id} className="rounded overflow-hidden shadow-lg flex flex-col bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
+          <div key={post.id} className="rounded-xl overflow-hidden shadow-lg flex flex-col bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
             <a href="#"></a>
             <div className="relative">
               <a href="#">
@@ -67,13 +67,13 @@ function HomePageCard() {
               <a href="#" className="font-medium text-lg hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">
                 {post.title}
               </a>
-              <p className="text-gray-500 hover:text-white text-sm">
+              <p className="text-white text-sm">
                 {post.description}
               </p>
             </div>
-            <div className="px-6 py-3 flex flex-row items-center justify-between bg-gray-200">
+            <div className="px-6 py-3 flex flex-row items-center justify-between bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
               
-              <button className="text-yellow-300 hover:text-blue-400 font-bold">
+              <button className="bg-indigo-600 p-2 rounded-lg hover:text-indigo-600 hover:bg-white transition duration-500 ease-in-out font-semibold">
                 Read More
               </button>
             </div>

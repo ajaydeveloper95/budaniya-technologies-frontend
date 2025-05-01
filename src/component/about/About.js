@@ -31,25 +31,25 @@ function About() {
         </h2>
 
         {/* Description */}
-        <h1>Where Innovation Meets Impact</h1>
-        <p className="text-gray-300 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0">
+        <h1 className="md:text-xl font-semibold">Where Innovation Meets Impact</h1>
+        <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
           We’re a passionate team of tech enthusiasts and creative minds, dedicated to transforming ideas into powerful digital solutions. At Budaniya Technologies, we don’t just build products — we bring visions to life.
         </p>
-        <h1>Our Mission</h1>
-        <p className="text-gray-300 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0">
+        <h1 className="md:text-xl font-semibold">Our Mission</h1>
+        <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
           To empower businesses by delivering tailored technology solutions that drive growth, enhance efficiency, and spark innovation.
         </p>
-        <h1>Why Choose Us?</h1>
-        <p className="text-gray-300 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0">
+        <h1 className="md:text-xl font-semibold">Why Choose Us?</h1>
+        <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
           We believe that collaboration and innovation are the cornerstones of success. That’s why we take the time to deeply understand your goals, challenges, and aspirations — allowing us to craft solutions that are not only effective but also aligned with your unique needs.<br />
           Whether it’s custom software, web development, or digital transformation, we think outside the box to design results-driven strategies that give you a competitive edge.
 
         </p>
-        <p className="text-gray-300 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0">
+        <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
           Let’s shape the future of your business — together.
         </p>
 
-        <p className="text-gray-300 mb-6 text-sm md:text-sm leading-relaxed max-w-2xl mx-auto md:mx-0">
+        <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
         📩 Got a question? We’re here to help. Reach out to us anytime at <span className="font-bold text-blue-400 hover:text-yellow-400 cursor-pointer"> join@budaniyatechnologies.com</span>
         </p>
 
