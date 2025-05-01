@@ -6,6 +6,7 @@ import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import { useCart } from "../CartContext";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const settings = {
   infinite: true,
@@ -22,6 +23,9 @@ const settings = {
 };
 
 const ProductDetails = () => {
+  const router = useRouter();
+  const { subcategory } = router.query;
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({
@@ -41,13 +45,17 @@ const ProductDetails = () => {
         const res = await apiGet(
           `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`
         );
-        setProducts(res.data.products);
+        setProducts(res.data.products || []);
       } catch (err) {
         console.error("Error fetching products:", err);
       }
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [filters, sortBy, order, products, subcategory]);
 
   const handleAddToCart = async (productId) => {
     try {
@@ -60,10 +68,6 @@ const ProductDetails = () => {
     }
   };
 
-  useEffect(() => {
-    applyFilters();
-  }, [filters, sortBy, order, products]);
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -71,6 +75,12 @@ const ProductDetails = () => {
 
   const applyFilters = () => {
     let result = [...products];
+
+    // Filter by subcategory from URL
+    if (subcategory) {
+      result = result.filter((p) => p.subcategory?.toLowerCase() === subcategory.toLowerCase());
+    }
+
     if (filters.search) {
       result = result.filter(
         (p) =>
@@ -78,24 +88,18 @@ const ProductDetails = () => {
           p.description.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
-    if (filters.minPrice)
-      result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
-    if (filters.maxPrice)
-      result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
-    if (filters.minDiscount)
-      result = result.filter((p) => p.discount >= Number(filters.minDiscount));
-    if (filters.maxDiscount)
-      result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
+
+    if (filters.minPrice) result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
+    if (filters.maxPrice) result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
+    if (filters.minDiscount) result = result.filter((p) => p.discount >= Number(filters.minDiscount));
+    if (filters.maxDiscount) result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
+
     if (sortBy !== "no") {
       result.sort((a, b) => {
         if (sortBy === "price")
-          return order === "asc"
-            ? a.actualPrice - b.actualPrice
-            : b.actualPrice - a.actualPrice;
+          return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
         if (sortBy === "discount")
-          return order === "asc"
-            ? a.discount - b.discount
-            : b.discount - a.discount;
+          return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
         if (sortBy === "name")
           return order === "asc"
             ? a.productName.localeCompare(b.productName)
@@ -103,6 +107,7 @@ const ProductDetails = () => {
         return 0;
       });
     }
+
     setFilteredProducts(result);
   };
 
@@ -147,25 +152,19 @@ const ProductDetails = () => {
         className="bg-white/10 p-6 rounded-xl shadow-md backdrop-blur-md mb-10"
       >
         <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
-          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map(
-            (name, idx) => (
-              <input
-                key={name}
-                type={
-                  name.includes("Price") || name.includes("Discount")
-                    ? "number"
-                    : "text"
-                }
-                name={name}
-                placeholder={name
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (str) => str.toUpperCase())}
-                value={filters[name]}
-                onChange={handleFilterChange}
-                className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
-              />
-            )
-          )}
+          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map((name) => (
+            <input
+              key={name}
+              type={name.includes("Price") || name.includes("Discount") ? "number" : "text"}
+              name={name}
+              placeholder={name
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+              value={filters[name]}
+              onChange={handleFilterChange}
+              className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
+            />
+          ))}
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -219,7 +218,7 @@ const ProductDetails = () => {
                   )}
                 </div>
                 <div className="p-4">
-                <h3 className="text-lg font-bold text-white mb-1">
+                  <h3 className="text-lg font-bold text-white mb-1">
                     {product.productName}
                   </h3>
                   <p className="text-sm text-blue-200 mb-2">
@@ -227,7 +226,7 @@ const ProductDetails = () => {
                       ? `${product.description.slice(0, 150)}...`
                       : product.description}
                   </p>
-                 
+
                   <p className="text-md text-white mb-1">
                     {product.technologies?.join(", ")}
                   </p>

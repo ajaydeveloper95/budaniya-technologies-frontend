@@ -134,7 +134,7 @@ function Footer() {
           variants={itemVariants}
         >
           <span>
-            © 2024 <Link href="/" className="hover:underline text-white">Budaniya Technologies</Link>. All Rights Reserved.
+            © 2025 <Link href="/" className="hover:underline text-white">Budaniya Technologies</Link>. All Rights Reserved.
           </span>
           <div className="flex space-x-4 mt-4 md:mt-4">
             {/* Additional icons can be added here */}
