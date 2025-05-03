@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { apiGet } from "../../utils/http";
 import Logo from "../../../public/assets/logoHeader.png";
 import "react-toastify/dist/ReactToastify.css";
+import { Menu, X } from "lucide-react";
 
 const API_ENDPOINT = "/api/auth/logOut";
 const CATEGORIES_API = "https://api.budaniyatechnologies.com/api/categories/";
@@ -17,6 +18,7 @@ function Navbar() {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [openCategory, setOpenCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -104,8 +106,9 @@ function Navbar() {
 
         {/* Main Menu */}
         <ul
-          className={`${isMobileMenuOpen ? "flex" : "hidden"
-            } flex-col md:flex md:flex-row md:space-x-8 text-white w-full md:w-auto mt-4 md:mt-0`}
+          className={`${
+            isMobileMenuOpen ? "flex" : "hidden"
+          } flex-col md:flex md:flex-row md:space-x-8 text-white w-full md:w-auto mt-4 md:mt-0`}
         >
           <li className="hover:text-gray-300">
             <Link href="/">Home</Link>
@@ -158,10 +161,75 @@ function Navbar() {
         </ul>
       </div>
 
-      {/* Categories Section */}
-      <div className="bg-gray-800 py-2 " ref={dropdownRef}>
-        <div className="max-w-7xl mx-auto">
-          <ul className="flex flex-wrap space-x-4 text-white">
+      <div className="bg-gray-800 py-2" ref={dropdownRef}>
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Mobile: Hamburger Button */}
+          <div className="flex justify-between items-center md:hidden">
+            <h2 className="text-white text-lg font-semibold">Categories</h2>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-white"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <ul className="block md:hidden mt-2 space-y-2 text-white">
+              {loadingCategories ? (
+                <li>Loading Categories...</li>
+              ) : (
+                categories.map((cat) => (
+                  <li key={cat._id}>
+                    <button
+                      onClick={() => toggleCategory(cat._id)}
+                      className="w-full text-left px-2 py-1 font-medium flex justify-between items-center hover:text-gray-300"
+                    >
+                      {cat.name}
+                      {cat.subcat?.length > 0 && (
+                        <svg
+                          className="ml-1 h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      )}
+                    </button>
+
+                    {/* Subcategories */}
+                    {cat.subcat?.length > 0 && openCategory === cat._id && (
+                      <div className="ml-4 bg-gray-700 rounded-md mt-1">
+                        {cat.subcat.map((sub) => (
+                          <Link
+                            key={sub._id}
+                            href={`/allProducts?subcategory=${sub.name}`}
+                            className="block px-4 py-2 text-sm text-white hover:bg-gray-600"
+                            onClick={() => {
+                              setOpenCategory(null);
+                              setMobileMenuOpen(false);
+                            }}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex flex-wrap space-x-4 text-white">
             {loadingCategories ? (
               <li>Loading Categories...</li>
             ) : (
@@ -189,7 +257,7 @@ function Navbar() {
                     )}
                   </button>
 
-                  {/* Dropdown for subcategories */}
+                  {/* Desktop Subcategories */}
                   {cat.subcat?.length > 0 && openCategory === cat._id && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                       <div className="py-1">
