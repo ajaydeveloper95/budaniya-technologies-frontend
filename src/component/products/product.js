@@ -3,13 +3,18 @@ import { useCart } from "../CartContext";
 import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 const API_ENDPOINT = `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`;
+const CATEGORIES_API = "api/categories/";
 
 const Product = () => {
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
@@ -18,8 +23,6 @@ const Product = () => {
     minDiscount: "",
     maxDiscount: "",
   });
-  const [sortBy, setSortBy] = useState("no");
-  const [order, setOrder] = useState("no");
   const [pagination, setPagination] = useState({
     totalDocuments: 0,
     currentPage: 1,
@@ -27,13 +30,13 @@ const Product = () => {
     totalPages: 0,
   });
 
-  const router = useRouter();
-  const { categoryId } = router.query;
-
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const res = await apiGet(API_ENDPOINT, {
         page: pagination.currentPage,
+        category: selectedCategory,
+        subcat: selectedSubcategory,
       });
       const allProducts = res.data.products || [];
       setProducts(allProducts);
@@ -41,16 +44,51 @@ const Product = () => {
       setPagination(res.data.pagination);
     } catch (err) {
       console.error("Failed to fetch products", err);
+      toast.error("Failed to load products");
+    } finally {
+      setLoading(false);
     }
   };
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await apiGet(CATEGORIES_API);
+      const data = Array.isArray(response.data)
+        ? response.data
+        : response.data.categories || [];
+      setCategories(data);
+    } catch (error) {
+      toast.error("Failed to load categories");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    // fetchProducts();
+  }, []);
 
   useEffect(() => {
     fetchProducts();
   }, [pagination.currentPage]);
 
   useEffect(() => {
-    applyFilters();
-  }, [filters, sortBy, order, products, categoryId, pagination.currentPage]);
+    if (selectedCategory) {
+      const category = categories.find((cat) => cat._id === selectedCategory);
+      if (category && category.subcat) {
+        setSubcategories(category.subcat);
+      } else {
+        setSubcategories([]);
+      }
+      setSelectedSubcategory("");
+    }
+  }, [selectedCategory, categories]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [filters, selectedCategory, selectedSubcategory, pagination.currentPage]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -60,72 +98,14 @@ const Product = () => {
     }));
   };
 
-  const applyFilters = () => {
-    let result = [...products];
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
 
-    if (categoryId && categoryId !== "all") {
-      result = result.filter(
-        (product) => product.category && product.category._id === categoryId
-      );
-    }
-
-    if (filters.search) {
-      result = result.filter(
-        (product) =>
-          product.productName
-            .toLowerCase()
-            .includes(filters.search.toLowerCase()) ||
-          product.description
-            .toLowerCase()
-            .includes(filters.search.toLowerCase())
-      );
-    }
-
-    if (filters.minPrice) {
-      result = result.filter(
-        (product) => product.actualPrice >= Number(filters.minPrice)
-      );
-    }
-    if (filters.maxPrice) {
-      result = result.filter(
-        (product) => product.actualPrice <= Number(filters.maxPrice)
-      );
-    }
-
-    if (filters.minDiscount) {
-      result = result.filter(
-        (product) => product.discount >= Number(filters.minDiscount)
-      );
-    }
-    if (filters.maxDiscount) {
-      result = result.filter(
-        (product) => product.discount <= Number(filters.maxDiscount)
-      );
-    }
-
-    if (sortBy !== "no") {
-      result.sort((a, b) => {
-        if (sortBy === "price") {
-          return order === "asc"
-            ? a.actualPrice - b.actualPrice
-            : b.actualPrice - a.actualPrice;
-        } else if (sortBy === "discount") {
-          return order === "asc"
-            ? a.discount - b.discount
-            : b.discount - a.discount;
-        } else if (sortBy === "name") {
-          return order === "asc"
-            ? a.productName.localeCompare(b.productName)
-            : b.productName.localeCompare(a.productName);
-        }
-        return 0;
-      });
-    }
-
-    const start = (pagination.currentPage - 1) * pagination.pageSize;
-    const end = start + pagination.pageSize;
-
-    setFilteredProducts(result.slice(start, end));
+  const handleSubcategoryChange = (e) => {
+    setSelectedSubcategory(e.target.value);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
   };
 
   const resetAllFilters = () => {
@@ -138,6 +118,8 @@ const Product = () => {
     });
     setSortBy("no");
     setOrder("no");
+    setSelectedCategory("");
+    setSelectedSubcategory("");
     setPagination((prev) => ({
       ...prev,
       currentPage: 1,
@@ -176,9 +158,9 @@ const Product = () => {
         </p>
       </div>
 
-      {/* Filters */}
+      {/* Filters Section */}
       <div className="bg-white/10 p-4 rounded-lg mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
+        {/* <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
           <input
             type="text"
             name="search"
@@ -219,28 +201,7 @@ const Product = () => {
             onChange={handleFilterChange}
             className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
           />
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-          >
-            <option value="no">Sort By</option>
-            <option value="price">Price</option>
-            <option value="discount">Discount</option>
-            <option value="name">Name</option>
-          </select>
-          <select
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
-          >
-            <option value="no">Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-
-        <div className="mt-4 flex justify-center">
+           <div className="m-4 flex justify-evenly">
           <button
             onClick={resetAllFilters}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
@@ -248,97 +209,150 @@ const Product = () => {
             Reset All
           </button>
         </div>
+        </div> */}
+
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="" className="text-black">All Categories</option>
+            {categories.map((category) => (
+              <option
+                key={category._id}
+                value={category._id}
+                className="text-black"
+              >
+                {category.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={selectedSubcategory}
+            onChange={handleSubcategoryChange}
+            disabled={!selectedCategory}
+            className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="">All Subcategories</option>
+            {subcategories.map((subcat) => (
+              <option
+                key={subcat._id}
+                value={subcat._id}
+                className="text-black"
+              >
+                {subcat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+       
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+        </div>
+      )}
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <div
-            key={product._id}
-            className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300"
-          >
-            <Link href={`/products/${product._id}`} className="block">
-              <div className="relative">
-                <img
-                  src={product.images[0]}
-                  alt={product.productName}
-                  className="w-full h-60 object-cover rounded"
-                />
-                {product.discount > 0 && (
-                  <div className="absolute top-2 right-2 bg-red-400 text-white text-xs font-bold px-2 py-0.5 rounded">
-                    {product.discount}% OFF
+      {!loading && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <div
+                key={product._id}
+                className="bg-transparent border border-white/20 rounded-lg shadow-md hover:shadow-white transition duration-300"
+              >
+                <Link href={`/products/${product._id}`} className="block">
+                  <div className="relative">
+                    <img
+                      src={product.images[0]}
+                      alt={product.productName}
+                      className="w-full h-60 object-cover rounded"
+                    />
+                    {product.discount > 0 && (
+                      <div className="absolute top-2 right-2 bg-red-400 text-white text-xs font-bold px-2 py-0.5 rounded">
+                        {product.discount}% OFF
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </Link>
-
-            <div className="p-2">
-              <h2 className="text-lg font-bold text-white mb-1">
-                {product.productName}
-              </h2>
-              <p className="text-sm text-blue-200 mb-2">
-                {product.description.length > 150
-                  ? `${product.description.slice(0, 150)}...`
-                  : product.description}
-              </p>
-              <p className="text-sm text-white">
-                {product.technologies?.join(", ")}
-              </p>
-
-              <div className="flex items-center space-x-2 mb-1">
-                <span className="text-xl font-bold text-green-300">
-                  ₹ {product.actualPrice}/-
-                </span>
-                {product.price > product.actualPrice && (
-                  <>
-                    <span className="line-through text-gray-400 text-sm">
-                      ₹ {product.price}/-
-                    </span>
-                    <span className="text-sm text-red-400 font-medium">
-                      Save ₹ {product.price - product.actualPrice}/-
-                    </span>
-                  </>
-                )}
-              </div>
-
-              <div className="flex justify-between items-center mt-3">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAddToCart(product);
-                  }}
-                  className="bg-white text-black px-3 py-1 rounded hover:bg-gray-300 text-lg"
-                >
-                  🛒
-                </button>
-                <Link
-                  href={`/products/${product._id}`}
-                  className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm"
-                >
-                  Buy Now
                 </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center mt-8 space-x-2">
-        {Array.from({ length: pagination.totalPages }, (_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 rounded ${
-              pagination.currentPage === index + 1
-                ? "bg-blue-600 text-white"
-                : "bg-white/20 text-white"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+                <div className="p-2">
+                  <h2 className="text-lg font-bold text-white mb-1">
+                    {product.productName}
+                  </h2>
+                  <p className="text-sm text-blue-200 mb-2">
+                    {product.description.length > 150
+                      ? `${product.description.slice(0, 150)}...`
+                      : product.description}
+                  </p>
+                  <p className="text-sm text-white">
+                    {product.technologies?.join(", ")}
+                  </p>
+
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-xl font-bold text-green-300">
+                      ₹ {product.actualPrice}/-
+                    </span>
+                    {product.price > product.actualPrice && (
+                      <>
+                        <span className="line-through text-gray-400 text-sm">
+                          ₹ {product.price}/-
+                        </span>
+                        <span className="text-sm text-red-400 font-medium">
+                          Save ₹ {product.price - product.actualPrice}/-
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between items-center mt-3">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAddToCart(product);
+                      }}
+                      className="bg-white text-black px-3 py-1 rounded hover:bg-gray-300 text-lg"
+                    >
+                      🛒
+                    </button>
+                    <Link
+                      href={`/products/${product._id}`}
+                      className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm"
+                    >
+                      Buy Now
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {pagination.totalPages > 1 && (
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: pagination.totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`px-4 py-2 rounded ${
+                    pagination.currentPage === index + 1
+                      ? "bg-blue-600 text-white"
+                      : "bg-white/20 text-white"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

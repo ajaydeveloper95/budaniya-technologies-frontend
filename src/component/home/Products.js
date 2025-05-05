@@ -27,16 +27,7 @@ const ProductDetails = () => {
   const { subcategory } = router.query;
 
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [filters, setFilters] = useState({
-    search: "",
-    minPrice: "",
-    maxPrice: "",
-    minDiscount: "",
-    maxDiscount: "",
-  });
-  const [sortBy, setSortBy] = useState("no");
-  const [order, setOrder] = useState("no");
+
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -53,9 +44,6 @@ const ProductDetails = () => {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [filters, sortBy, order, products, subcategory]);
 
   const handleAddToCart = async (productId) => {
     try {
@@ -66,61 +54,6 @@ const ProductDetails = () => {
       toast.error("Failed to add item to cart.");
       console.error("Add to cart error:", err);
     }
-  };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const applyFilters = () => {
-    let result = [...products];
-
-    // Filter by subcategory from URL
-    if (subcategory) {
-      result = result.filter((p) => p.subcategory?.toLowerCase() === subcategory.toLowerCase());
-    }
-
-    if (filters.search) {
-      result = result.filter(
-        (p) =>
-          p.productName.toLowerCase().includes(filters.search.toLowerCase()) ||
-          p.description.toLowerCase().includes(filters.search.toLowerCase())
-      );
-    }
-
-    if (filters.minPrice) result = result.filter((p) => p.actualPrice >= Number(filters.minPrice));
-    if (filters.maxPrice) result = result.filter((p) => p.actualPrice <= Number(filters.maxPrice));
-    if (filters.minDiscount) result = result.filter((p) => p.discount >= Number(filters.minDiscount));
-    if (filters.maxDiscount) result = result.filter((p) => p.discount <= Number(filters.maxDiscount));
-
-    if (sortBy !== "no") {
-      result.sort((a, b) => {
-        if (sortBy === "price")
-          return order === "asc" ? a.actualPrice - b.actualPrice : b.actualPrice - a.actualPrice;
-        if (sortBy === "discount")
-          return order === "asc" ? a.discount - b.discount : b.discount - a.discount;
-        if (sortBy === "name")
-          return order === "asc"
-            ? a.productName.localeCompare(b.productName)
-            : b.productName.localeCompare(a.productName);
-        return 0;
-      });
-    }
-
-    setFilteredProducts(result);
-  };
-
-  const resetAllFilters = () => {
-    setFilters({
-      search: "",
-      minPrice: "",
-      maxPrice: "",
-      minDiscount: "",
-      maxDiscount: "",
-    });
-    setSortBy("no");
-    setOrder("no");
   };
 
   return (
@@ -144,59 +77,8 @@ const ProductDetails = () => {
         </motion.p>
       </div>
 
-      {/* Filters */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white/10 p-6 rounded-xl shadow-md backdrop-blur-md mb-10"
-      >
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
-          {["search", "minPrice", "maxPrice", "minDiscount", "maxDiscount"].map((name) => (
-            <input
-              key={name}
-              type={name.includes("Price") || name.includes("Discount") ? "number" : "text"}
-              name={name}
-              placeholder={name
-                .replace(/([A-Z])/g, " $1")
-                .replace(/^./, (str) => str.toUpperCase())}
-              value={filters[name]}
-              onChange={handleFilterChange}
-              className="w-full p-2 rounded-lg bg-white/10 text-white placeholder-white/60 border border-white/20"
-            />
-          ))}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
-          >
-            <option value="no">Sort By</option>
-            <option value="price">Price</option>
-            <option value="discount">Discount</option>
-            <option value="name">Name</option>
-          </select>
-          <select
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
-          >
-            <option value="no">Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-        <div className="mt-5 flex justify-center">
-          <button
-            onClick={resetAllFilters}
-            className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition"
-          >
-            Reset All
-          </button>
-        </div>
-      </motion.div>
-
       <Slider {...settings}>
-        {filteredProducts.map((product) => (
+        {products.map((product) => (
           <motion.div
             key={product._id}
             initial={{ opacity: 0, y: 30 }}

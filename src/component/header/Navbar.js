@@ -82,6 +82,7 @@ function Navbar() {
   const toggleCategory = (categoryId) => {
     setOpenCategory(openCategory === categoryId ? null : categoryId);
   };
+  
 
   return (
     <nav className="bg-black sticky top-0 z-50 dark:bg-gray-900">
@@ -207,17 +208,18 @@ function Navbar() {
                     {cat.subcat?.length > 0 && openCategory === cat._id && (
                       <div className="ml-4 bg-gray-700 rounded-md mt-1">
                         {cat.subcat.map((sub) => (
-                          <Link
-                            key={sub._id}
-                            href={`/allProducts?subcategory=${sub.name}`}
-                            className="block px-4 py-2 text-sm text-white hover:bg-gray-600"
-                            onClick={() => {
-                              setOpenCategory(null);
-                              setMobileMenuOpen(false);
-                            }}
-                          >
-                            {sub.name}
-                          </Link>
+                         <Link
+                         key={sub._id}
+                         href={`/allProducts?subcategoryId=${sub._id}`}
+                         className="block px-4 py-2 text-sm text-white hover:bg-gray-600"
+                         onClick={() => {
+                           setOpenCategory(null);
+                           setMobileMenuOpen(false);
+                         }}
+                       >
+                         {sub.name}
+                       </Link>
+                       
                         ))}
                       </div>
                     )}
@@ -259,14 +261,15 @@ function Navbar() {
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {cat.subcat.map((sub) => (
-                          <Link
-                            key={sub._id}
-                            href={`/allProducts?subcategory=${sub.name}`}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => setOpenCategory(null)}
-                          >
-                            {sub.name}
-                          </Link>
+                         <Link
+                         key={sub._id}
+                         href={`/allProducts?subcategoryId=${sub._id}`}
+                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                         onClick={() => setOpenCategory(null)}
+                       >
+                         {sub.name}
+                       </Link>
+                       
                         ))}
                       </div>
                     </div>
