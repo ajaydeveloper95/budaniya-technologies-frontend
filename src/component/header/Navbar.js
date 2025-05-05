@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { apiGet } from "../../utils/http";
 import Logo from "../../../public/assets/logoHeader.png";
 import "react-toastify/dist/ReactToastify.css";
+import { Menu, X } from "lucide-react";
 
 const API_ENDPOINT = "/api/auth/logOut";
 const CATEGORIES_API = "api/categories/";
@@ -17,6 +18,7 @@ function Navbar() {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [openCategory, setOpenCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -159,10 +161,82 @@ function Navbar() {
         </ul>
       </div>
 
+<<<<<<< HEAD
       {/* Categories Section */}
       <div className="bg-gray-800 py-2 " ref={dropdownRef}>
         <div className="max-w-7xl mx-auto">
           <ul className="flex flex-wrap space-x-4 text-white">
+=======
+      <div className="bg-gray-800 py-2" ref={dropdownRef}>
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Mobile: Hamburger Button */}
+          <div className="flex justify-between items-center md:hidden">
+            <h2 className="text-white text-lg font-semibold">Categories</h2>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-white"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <ul className="block md:hidden mt-2 space-y-2 text-white">
+              {loadingCategories ? (
+                <li>Loading Categories...</li>
+              ) : (
+                categories.map((cat) => (
+                  <li key={cat._id}>
+                    <button
+                      onClick={() => toggleCategory(cat._id)}
+                      className="w-full text-left px-2 py-1 font-medium flex justify-between items-center hover:text-gray-300"
+                    >
+                      {cat.name}
+                      {cat.subcat?.length > 0 && (
+                        <svg
+                          className="ml-1 h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      )}
+                    </button>
+
+                    {/* Subcategories */}
+                    {cat.subcat?.length > 0 && openCategory === cat._id && (
+                      <div className="ml-4 bg-gray-700 rounded-md mt-1">
+                        {cat.subcat.map((sub) => (
+                          <Link
+                            key={sub._id}
+                            href={`/allProducts?subcategory=${sub.name}`}
+                            className="block px-4 py-2 text-sm text-white hover:bg-gray-600"
+                            onClick={() => {
+                              setOpenCategory(null);
+                              setMobileMenuOpen(false);
+                            }}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex flex-wrap space-x-4 text-white">
+>>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
             {loadingCategories ? (
               <li>Loading Categories...</li>
             ) : (
@@ -190,12 +264,17 @@ function Navbar() {
                     )}
                   </button>
 
+<<<<<<< HEAD
                   {/* Dropdown for subcategories */}
+=======
+                  {/* Desktop Subcategories */}
+>>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
                   {cat.subcat?.length > 0 && openCategory === cat._id && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {cat.subcat.map((sub) => (
                           <Link
+<<<<<<< HEAD
                           key={sub._id}
                           href={`/allProducts?subcategory=${sub.name}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -203,6 +282,15 @@ function Navbar() {
                         >
                           {sub.name}
                         </Link>
+=======
+                            key={sub._id}
+                            href={`/allProducts?subcategory=${sub.name}`}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setOpenCategory(null)}
+                          >
+                            {sub.name}
+                          </Link>
+>>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
                         ))}
                       </div>
                     </div>
