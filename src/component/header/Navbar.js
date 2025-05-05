@@ -160,13 +160,6 @@ function Navbar() {
           )}
         </ul>
       </div>
-
-<<<<<<< HEAD
-      {/* Categories Section */}
-      <div className="bg-gray-800 py-2 " ref={dropdownRef}>
-        <div className="max-w-7xl mx-auto">
-          <ul className="flex flex-wrap space-x-4 text-white">
-=======
       <div className="bg-gray-800 py-2" ref={dropdownRef}>
         <div className="max-w-7xl mx-auto px-4">
           {/* Mobile: Hamburger Button */}
@@ -236,7 +229,6 @@ function Navbar() {
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex flex-wrap space-x-4 text-white">
->>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
             {loadingCategories ? (
               <li>Loading Categories...</li>
             ) : (
@@ -263,26 +255,11 @@ function Navbar() {
                       </svg>
                     )}
                   </button>
-
-<<<<<<< HEAD
-                  {/* Dropdown for subcategories */}
-=======
-                  {/* Desktop Subcategories */}
->>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
                   {cat.subcat?.length > 0 && openCategory === cat._id && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {cat.subcat.map((sub) => (
                           <Link
-<<<<<<< HEAD
-                          key={sub._id}
-                          href={`/allProducts?subcategory=${sub.name}`}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => setOpenCategory(null)}
-                        >
-                          {sub.name}
-                        </Link>
-=======
                             key={sub._id}
                             href={`/allProducts?subcategory=${sub.name}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -290,7 +267,6 @@ function Navbar() {
                           >
                             {sub.name}
                           </Link>
->>>>>>> d29fedf4941b2cf8b11ae7f321019fd819eafae2
                         ))}
                       </div>
                     </div>
