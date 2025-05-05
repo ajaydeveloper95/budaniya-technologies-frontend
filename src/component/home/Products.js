@@ -78,7 +78,7 @@ const ProductDetails = () => {
       </div>
 
       <Slider {...settings}>
-        {products.map((product) => (
+        {products?.map((product) => (
           <motion.div
             key={product._id}
             initial={{ opacity: 0, y: 30 }}

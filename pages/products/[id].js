@@ -10,7 +10,7 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
-  const [activeTab, setActiveTab] = useState("description"); // NEW
+  const [activeTab, setActiveTab] = useState("support"); // NEW
 
   useEffect(() => {
     if (id) {
@@ -69,7 +69,7 @@ const ProductDetailPage = () => {
             {/* Tabs */}
             <div className="">
             <div className="flex gap-4 mb-4 border-b border-gray-600">
-              {["description", "specifications", "reviews"].map((tab) => (
+              {["support", "specification", "reviews"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -85,21 +85,16 @@ const ProductDetailPage = () => {
             </div>
 
             <div className="text-sm text-gray-300">
-              {activeTab === "description" && (
-                <p>{product.description}</p>
+              {activeTab === "support" && (
+                <p>{product.support}</p>
               )}
 
-              {activeTab === "specifications" && (
-                <ul className="list-disc pl-5">
-                  <li>Technology Stack: {product.technologies.join(", ")}</li>
-                  <li>Price: ₹{product.price}</li>
-                  <li>Actual Price: ₹{product.actualPrice}</li>
-                  <li>Discount: {product.discount}%</li>
-                </ul>
+              {activeTab === "specification" && (
+                <p>{product.specification}</p>
               )}
 
               {activeTab === "reviews" && (
-                <p>No reviews available yet.</p> // Optional: Add dynamic reviews
+                <p>{product.reviews}</p>
               )}
             </div>
           </div>

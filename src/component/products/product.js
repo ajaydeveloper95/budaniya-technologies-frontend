@@ -3,8 +3,9 @@ import { useCart } from "../CartContext";
 import { apiGet, apiPost } from "../../utils/http";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-const API_ENDPOINT = `api/product/getproducts?referenceWebsite=${process.env.NEXT_PUBLIC_REFERENCE_WEBSITE}`;
+const API_ENDPOINT = `api/product/getproducts`;
 const CATEGORIES_API = "api/categories/";
 
 const Product = () => {
@@ -20,8 +21,10 @@ const Product = () => {
     search: "",
     minPrice: "",
     maxPrice: "",
-    minDiscount: "",
-    maxDiscount: "",
+    minDiscount: 0,
+    maxDiscount: 100,
+    sortBy: "createdAt",
+    sortOrder: "desc",
   });
   const [pagination, setPagination] = useState({
     totalDocuments: 0,
@@ -30,14 +33,36 @@ const Product = () => {
     totalPages: 0,
   });
 
+  const router = useRouter();
+  const { vendorId } = router.query;
+
+  const buildQueryParams = () => {
+    const params = {
+      referenceWebsite: process.env.NEXT_PUBLIC_REFERENCE_WEBSITE,
+      page: pagination.currentPage,
+      limit: pagination.pageSize,
+    };
+
+    if (selectedCategory) params.category = selectedCategory;
+    if (selectedSubcategory) params.subcat = selectedSubcategory;
+    if (filters.search) params.search = filters.search;
+    if (filters.minPrice) params.minPrice = filters.minPrice;
+    if (filters.maxPrice) params.maxPrice = filters.maxPrice;
+    if (filters.minDiscount !== 0) params.minDiscount = filters.minDiscount;
+    if (filters.maxDiscount !== 100) params.maxDiscount = filters.maxDiscount;
+    if (filters.sortBy) params.sortBy = filters.sortBy;
+    if (filters.sortOrder) params.sortOrder = filters.sortOrder;
+    if (vendorId) params.vendorId = vendorId;
+
+    return params;
+  };
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await apiGet(API_ENDPOINT, {
-        page: pagination.currentPage,
-        category: selectedCategory,
-        subcat: selectedSubcategory,
-      });
+      const queryParams = buildQueryParams();
+      const res = await apiGet(API_ENDPOINT, queryParams);
+      
       const allProducts = res.data.products || [];
       setProducts(allProducts);
       setFilteredProducts(allProducts);
@@ -67,12 +92,17 @@ const Product = () => {
 
   useEffect(() => {
     fetchCategories();
-    // fetchProducts();
   }, []);
 
   useEffect(() => {
     fetchProducts();
-  }, [pagination.currentPage]);
+  }, [
+    pagination.currentPage,
+    selectedCategory,
+    selectedSubcategory,
+    filters,
+    vendorId
+  ]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -85,10 +115,6 @@ const Product = () => {
       setSelectedSubcategory("");
     }
   }, [selectedCategory, categories]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [filters, selectedCategory, selectedSubcategory, pagination.currentPage]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -108,16 +134,25 @@ const Product = () => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   };
 
+  const handleSortChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
+
   const resetAllFilters = () => {
     setFilters({
       search: "",
       minPrice: "",
       maxPrice: "",
-      minDiscount: "",
-      maxDiscount: "",
+      minDiscount: 0,
+      maxDiscount: 100,
+      sortBy: "createdAt",
+      sortOrder: "desc",
     });
-    setSortBy("no");
-    setOrder("no");
     setSelectedCategory("");
     setSelectedSubcategory("");
     setPagination((prev) => ({
@@ -160,7 +195,7 @@ const Product = () => {
 
       {/* Filters Section */}
       <div className="bg-white/10 p-4 rounded-lg mb-8">
-        {/* <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 items-center">
           <input
             type="text"
             name="search"
@@ -201,15 +236,27 @@ const Product = () => {
             onChange={handleFilterChange}
             className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
           />
-           <div className="m-4 flex justify-evenly">
-          <button
-            onClick={resetAllFilters}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          <select
+            name="sortBy"
+            value={filters.sortBy}
+            onChange={handleSortChange}
+            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
           >
-            Reset All
-          </button>
+            <option value="createdAt" className="text-black">Newest</option>
+            <option value="price" className="text-black">Price</option>
+            <option value="discount" className="text-black">Discount</option>
+            <option value="name" className="text-black">Name</option>
+          </select>
+          <select
+            name="sortOrder"
+            value={filters.sortOrder}
+            onChange={handleSortChange}
+            className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20"
+          >
+            <option value="desc" className="text-black">Descending</option>
+            <option value="asc" className="text-black">Ascending</option>
+          </select>
         </div>
-        </div> */}
 
         <div className="grid grid-cols-2 gap-4 mt-4">
           <select
@@ -235,7 +282,7 @@ const Product = () => {
             disabled={!selectedCategory}
             className="w-full p-2 rounded bg-white/10 text-white border border-white/20"
           >
-            <option value="">All Subcategories</option>
+            <option value="" className="text-black">All Subcategories</option>
             {subcategories.map((subcat) => (
               <option
                 key={subcat._id}
@@ -248,7 +295,14 @@ const Product = () => {
           </select>
         </div>
 
-       
+        <div className="m-4 flex justify-evenly">
+          <button
+            onClick={resetAllFilters}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Reset All
+          </button>
+        </div>
       </div>
 
       {/* Loading State */}
