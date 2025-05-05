@@ -10,7 +10,7 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
-  const [activeTab, setActiveTab] = useState("support"); // NEW
+  const [activeTab, setActiveTab] = useState("support");
 
   useEffect(() => {
     if (id) {
@@ -44,38 +44,41 @@ const ProductDetailPage = () => {
   if (!product) return <div className="text-white p-10">Loading...</div>;
 
   return (
-    <div className="p-10 text-white">
-      <div className="flex items-center justify-center gap-8">
+    <div className="p-4 md:p-10 text-white">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-8">
         {/* Left: Product Image */}
-        <div className="w-1/2">
+        <div className="w-full md:w-1/2">
           <img
             src={mainImage}
             alt={product.productName}
-            className="w-100 h-80 object-cover rounded-lg"
+            className="w-full h-64 object-cover rounded-lg"
           />
-          <div className="mt-4 mb-8 flex gap-4">
+          <div className="mt-4 mb-8 flex flex-wrap gap-4">
             {product.images.map((image, index) => (
               <img
                 key={index}
                 src={image}
                 alt={`Product Image ${index + 1}`}
                 className={`w-16 h-16 object-cover cursor-pointer border-2 rounded ${
-                  mainImage === image ? "border-yellow-400" : "border-gray-400"
+                  mainImage === image
+                    ? "border-yellow-400"
+                    : "border-gray-400"
                 }`}
                 onClick={() => setMainImage(image)}
               />
             ))}
           </div>
-            {/* Tabs */}
-            <div className="">
-            <div className="flex gap-4 mb-4 border-b border-gray-600">
+
+          {/* Tabs */}
+          <div>
+            <div className="flex gap-4 mb-4 border-b border-gray-600 overflow-x-auto">
               {["support", "specification", "reviews"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-2 px-4 font-medium capitalize ${
+                  className={`py-2 px-4 font-medium capitalize whitespace-nowrap ${
                     activeTab === tab
-                      ? " border-yellow-400 text-yellow-400"
+                      ? "border-b-2 border-yellow-400 text-yellow-400"
                       : "text-gray-400"
                   }`}
                 >
@@ -85,32 +88,24 @@ const ProductDetailPage = () => {
             </div>
 
             <div className="text-sm text-gray-300">
-              {activeTab === "support" && (
-                <p>{product.support}</p>
-              )}
-
-              {activeTab === "specification" && (
-                <p>{product.specification}</p>
-              )}
-
-              {activeTab === "reviews" && (
-                <p>{product.reviews}</p>
-              )}
+              {activeTab === "support" && <p>{product.support}</p>}
+              {activeTab === "specification" && <p>{product.specification}</p>}
+              {activeTab === "reviews" && <p>{product.reviews}</p>}
             </div>
           </div>
         </div>
 
         {/* Right: Product Info */}
-        <div className="w-1/2">
-          <h1 className="text-3xl font-bold mb-4">{product.productName}</h1>
-          <p className="mb-2 text-blue-300">
-            {product.description}
-          </p>
+        <div className="w-full md:w-1/2">
+          <h1 className="text-2xl md:text-3xl font-bold mb-4">
+            {product.productName}
+          </h1>
+          <p className="mb-2 text-blue-300">{product.description}</p>
 
           {/* Technologies */}
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Technologies:</h3>
-            <div className="flex gap-2 mt-2">
+            <div className="flex flex-wrap gap-2 mt-2">
               {product.technologies.map((tech, idx) => (
                 <span
                   key={idx}
@@ -124,7 +119,7 @@ const ProductDetailPage = () => {
 
           {/* Pricing */}
           <div className="mb-4">
-            <p className="text-green-400 text-2xl font-semibold">
+            <p className="text-green-400 text-xl md:text-2xl font-semibold">
               ₹ {product.actualPrice}/-
               <span className="line-through text-red-400 text-lg ml-2">
                 ₹ {product.price}/-
@@ -142,13 +137,11 @@ const ProductDetailPage = () => {
                 e.preventDefault();
                 handleAddToCart(product._id);
               }}
-              className="bg-yellow-400 text-black px-6 py-2 rounded font-bold hover:bg-yellow-500"
+              className="bg-yellow-400 text-black px-6 py-2 rounded font-bold hover:bg-yellow-500 w-full md:w-auto"
             >
               Add to Cart 🛒
             </button>
           </div>
-
-        
         </div>
       </div>
     </div>
