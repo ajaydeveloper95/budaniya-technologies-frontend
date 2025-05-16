@@ -17,8 +17,11 @@ const ProductDetailPage = () => {
       const fetchProduct = async () => {
         try {
           const res = await apiGet(`api/product/getproduct/${id}`);
-          setProduct(res.data.product);
-          setMainImage(res.data.product.images[0]);
+          const fetchedProduct = res.data.product;
+          setProduct(fetchedProduct);
+          if (fetchedProduct.images && fetchedProduct.images.length > 0) {
+            setMainImage(fetchedProduct.images[0]);
+          }
         } catch (err) {
           console.error("Failed to fetch product", err);
         }
@@ -49,15 +52,15 @@ const ProductDetailPage = () => {
         {/* Left: Product Image */}
         <div className="w-full md:w-1/2">
           <img
-            src={mainImage}
+            src={mainImage || "/placeholder.jpg"}
             alt={product.productName}
             className="w-full h-64 object-cover rounded-lg"
           />
           <div className="mt-4 mb-8 flex flex-wrap gap-4">
-            {product.images.map((image, index) => (
+            {product.images?.map((image, index) => (
               <img
                 key={index}
-                src={image}
+                src={image || "/placeholder.jpg"}
                 alt={`Product Image ${index + 1}`}
                 className={`w-16 h-16 object-cover cursor-pointer border-2 rounded ${
                   mainImage === image
@@ -87,11 +90,12 @@ const ProductDetailPage = () => {
               ))}
             </div>
 
-            <div className="text-sm text-gray-300">
-              {activeTab === "support" && <p>{product.support}</p>}
-              {activeTab === "specification" && <p>{product.specification}</p>}
-              {activeTab === "reviews" && <p>{product.reviews}</p>}
-            </div>
+            <div
+              className="text-sm text-gray-300"
+              dangerouslySetInnerHTML={{
+                __html: product[activeTab] || "<p>No content available.</p>",
+              }}
+            />
           </div>
         </div>
 
@@ -106,7 +110,7 @@ const ProductDetailPage = () => {
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Technologies:</h3>
             <div className="flex flex-wrap gap-2 mt-2">
-              {product.technologies.map((tech, idx) => (
+              {product.technologies?.map((tech, idx) => (
                 <span
                   key={idx}
                   className="bg-gray-700 px-3 py-1 rounded-full text-sm"
@@ -121,13 +125,17 @@ const ProductDetailPage = () => {
           <div className="mb-4">
             <p className="text-green-400 text-xl md:text-2xl font-semibold">
               ₹ {product.actualPrice}/-
-              <span className="line-through text-red-400 text-lg ml-2">
-                ₹ {product.price}/-
-              </span>
+              {product.price !== product.actualPrice && (
+                <span className="line-through text-red-400 text-lg ml-2">
+                  ₹ {product.price}/-
+                </span>
+              )}
             </p>
-            <p className="text-yellow-400 mt-1">
-              Discount: {product.discount}%
-            </p>
+            {product.discount > 0 && (
+              <p className="text-yellow-400 mt-1">
+                Discount: {product.discount}%
+              </p>
+            )}
           </div>
 
           {/* Add to Cart */}
