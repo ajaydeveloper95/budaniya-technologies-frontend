@@ -10,7 +10,7 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
-  const [activeTab, setActiveTab] = useState("support");
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     if (id) {
@@ -75,7 +75,7 @@ const ProductDetailPage = () => {
           {/* Tabs */}
           <div>
             <div className="flex gap-4 mb-4 border-b border-gray-600 overflow-x-auto">
-              {["support", "specification", "reviews"].map((tab) => (
+              {["overview", "specification", "support", "reviews"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
