@@ -44,11 +44,55 @@ const ProductDetailPage = () => {
     }
   };
 
+  const handleBuyNow = (productId) => {
+    const selectedProduct = {
+      _id: product._id,
+      productName: product.productName,
+      price: product.actualPrice,
+      quantity: 1,
+      total: product.actualPrice,
+    };
+    router.push({
+      pathname: "/checkout",
+      query: {
+        data: JSON.stringify(selectedProduct),
+      },
+    });
+  };
+
   if (!product) return <div className="text-white p-10">Loading...</div>;
+
+  // Reusable Tabs Section
+  const renderTabs = () => (
+    <div className="mt-6">
+      <div className="flex gap-4 mb-4 border-b border-gray-600 overflow-x-auto">
+        {["overview", "specification", "support", "reviews"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`py-2 px-4 font-medium capitalize whitespace-nowrap ${
+              activeTab === tab
+                ? "border-b-2 border-yellow-400 text-yellow-400"
+                : "text-gray-400"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div
+        className="text-sm text-gray-300"
+        dangerouslySetInnerHTML={{
+          __html: product[activeTab] || "<p>No content available.</p>",
+        }}
+      />
+    </div>
+  );
 
   return (
     <div className="p-4 md:p-10 text-white">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-center gap-8">
+      <div className="flex flex-col md:flex-row items-start justify-center gap-8">
         {/* Left: Product Image */}
         <div className="w-full md:w-1/2">
           <img
@@ -63,40 +107,15 @@ const ProductDetailPage = () => {
                 src={image || "/placeholder.jpg"}
                 alt={`Product Image ${index + 1}`}
                 className={`w-16 h-16 object-cover cursor-pointer border-2 rounded ${
-                  mainImage === image
-                    ? "border-yellow-400"
-                    : "border-gray-400"
+                  mainImage === image ? "border-yellow-400" : "border-gray-400"
                 }`}
                 onClick={() => setMainImage(image)}
               />
             ))}
           </div>
 
-          {/* Tabs */}
-          <div>
-            <div className="flex gap-4 mb-4 border-b border-gray-600 overflow-x-auto">
-              {["overview", "specification", "support", "reviews"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`py-2 px-4 font-medium capitalize whitespace-nowrap ${
-                    activeTab === tab
-                      ? "border-b-2 border-yellow-400 text-yellow-400"
-                      : "text-gray-400"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            <div
-              className="text-sm text-gray-300"
-              dangerouslySetInnerHTML={{
-                __html: product[activeTab] || "<p>No content available.</p>",
-              }}
-            />
-          </div>
+          {/* Show Tabs only on medium and up */}
+          <div className="hidden md:block">{renderTabs()}</div>
         </div>
 
         {/* Right: Product Info */}
@@ -139,7 +158,7 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Add to Cart */}
-          <div className="mt-6 mb-6">
+          <div className="mt-6 mb-6 flex gap-2">
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -149,7 +168,19 @@ const ProductDetailPage = () => {
             >
               Add to Cart 🛒
             </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleBuyNow(product._id);
+              }}
+              className="bg-blue-400 text-black px-6 py-2 rounded font-bold w-full md:w-auto"
+            >
+              Buy Now
+            </button>
           </div>
+
+          {/* Tabs shown below Add to Cart on small screens */}
+          <div className="block md:hidden">{renderTabs()}</div>
         </div>
       </div>
     </div>

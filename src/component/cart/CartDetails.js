@@ -23,12 +23,12 @@ const CartDetails = () => {
 
     const totalPrice = quantity * actualPrice;
 
-    console.log({
-      productId,
-      quantity,
-      total: totalPrice,
-      actualPrice,
-    });
+    // console.log({
+    //   productId,
+    //   quantity,
+    //   total: totalPrice,
+    //   actualPrice,
+    // });
 
     apiPost("api/cart/update", {
       productId,
