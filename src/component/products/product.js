@@ -211,23 +211,24 @@ const Product = () => {
                 >
                   {category.name}
                 </button>
-                {selectedCategory === category._id && subcategories.length > 0 && (
-                  <div className="ml-4 mt-2 space-y-1">
-                    {subcategories.map((subcat) => (
-                      <button
-                        key={subcat._id}
-                        onClick={() => handleSubcategoryChange(subcat._id)}
-                        className={`w-full text-left p-2 rounded ${
-                          selectedSubcategory === subcat._id
-                            ? "bg-blue-400 text-white"
-                            : "bg-white/5 text-white hover:bg-white/10"
-                        }`}
-                      >
-                        {subcat.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                {selectedCategory === category._id &&
+                  subcategories.length > 0 && (
+                    <div className="ml-4 mt-2 space-y-1">
+                      {subcategories.map((subcat) => (
+                        <button
+                          key={subcat._id}
+                          onClick={() => handleSubcategoryChange(subcat._id)}
+                          className={`w-full text-left p-2 rounded ${
+                            selectedSubcategory === subcat._id
+                              ? "bg-blue-400 text-white"
+                              : "bg-white/5 text-white hover:bg-white/10"
+                          }`}
+                        >
+                          {subcat.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
               </div>
             ))}
           </div>
@@ -288,7 +289,8 @@ const Product = () => {
                 Reset All
               </button>
               <div className="text-white">
-                Showing {filteredProducts.length} of {pagination.totalDocuments} products
+                Showing {filteredProducts.length} of {pagination.totalDocuments}{" "}
+                products
               </div>
             </div>
           </div>
@@ -377,20 +379,67 @@ const Product = () => {
 
               {/* Pagination */}
               {pagination.totalPages > 1 && (
-                <div className="flex justify-center mt-8 space-x-2">
-                  {Array.from({ length: pagination.totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handlePageChange(index + 1)}
-                      className={`px-4 py-2 rounded ${
-                        pagination.currentPage === index + 1
-                          ? "bg-blue-600 text-white"
-                          : "bg-white/20 text-white"
-                      }`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+                <div className="mt-8 flex justify-center gap-2">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(pagination.currentPage - 1)}
+                    disabled={pagination.currentPage === 1}
+                    className="px-3 py-1 rounded bg-white/10 text-white disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from(
+                    { length: pagination.totalPages },
+                    (_, i) => i + 1
+                  )
+                    .filter((page) => {
+                      const { currentPage, totalPages } = pagination;
+                      return (
+                        page === 1 ||
+                        page === totalPages ||
+                        Math.abs(page - currentPage) <= 1
+                      );
+                    })
+                    .reduce((acc, page, idx, arr) => {
+                      if (idx > 0 && page - arr[idx - 1] > 1) {
+                        acc.push("...");
+                      }
+                      acc.push(page);
+                      return acc;
+                    }, [])
+                    .map((page, i) =>
+                      page === "..." ? (
+                        <span
+                          key={`ellipsis-${i}`}
+                          className="px-2 py-1 text-white"
+                        >
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`px-3 py-1 rounded ${
+                            pagination.currentPage === page
+                              ? "bg-blue-600 text-white"
+                              : "bg-white/10 text-white"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(pagination.currentPage + 1)}
+                    disabled={pagination.currentPage === pagination.totalPages}
+                    className="px-3 py-1 rounded bg-white/10 text-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
                 </div>
               )}
             </>
