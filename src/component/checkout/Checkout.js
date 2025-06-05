@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { apiGet, apiPost } from "../../utils/http";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 function Checkout() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [productData, setProductData] = useState(null);
   const [cart, setCart] = useState(null);
   const [isDirectBuy, setIsDirectBuy] = useState(false);
-
-  const [fullName, setFullName] = useState("");
-  const [shippingAddress, setShippingAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [country, setCountry] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const productQuery = searchParams.get("data");
     if (productQuery) {
-      const parsed = JSON.parse(productQuery);
-      setProductData(parsed);
-      setIsDirectBuy(true);
+      try {
+        const parsed = JSON.parse(productQuery);
+        setProductData(parsed);
+        setIsDirectBuy(true);
+      } catch (e) {
+        console.error("Error parsing product data:", e);
+      }
     } else {
       apiGet("/api/cart")
         .then((response) => {
@@ -33,53 +28,59 @@ function Checkout() {
           console.error("Error fetching cart data:", error);
         });
     }
-  }, []);
+  }, [searchParams]); // Added searchParams to dependency array
 
-  const handleSubmit = () => {
-    const products = isDirectBuy
-      ? [
-          {
-            product: productData._id,
-            quantity: productData.quantity,
-            total: productData.total,
-            price: productData.price,
-          },
-        ]
-      : cart?.items?.map((item) => ({
-          product: item.product?._id,
-          quantity: item.quantity,
-          total: item.total,
-          price: item.price,
-        })) || [];
+  const handlePaymentInit = async () => {
+    const data = isDirectBuy ? productData : cart;
 
-    const shippingDetails = {
-      country,
-      state,
-      line1: shippingAddress,
-      city,
-      postalCode,
-    };
+    if (!data?.total && !data?.totalAmount) {
+      alert("Amount not available");
+      return;
+    }
 
     const payload = {
-      products,
-      shippingAddress: shippingDetails,
-      totalAmount: isDirectBuy ? productData.total : cart?.totalAmount,
-      status: "pending",
-      paymentStatus: "pending",
-      type: isDirectBuy ? "buyNow" : "cart",
+      trxId: data.trxId || "trx_" + Date.now(),
+      price: data.total || data.totalAmount || 0,
+      email: data.email || "default@example.com",
+      name: data.name || "Unknown",
+      service: data.service || "unknown",
+      mobileNumber: data.mobileNumber || "0000000000",
     };
 
-    apiPost("api/order/order", payload)
-      .then(() => {
-        router.push("/thankyou");
-      })
-      .catch((error) => {
-        console.error("Order submission failed:", error);
-        alert("Order failed. Try again.");
-      });
+    try {
+      setLoading(true);
+      const res = await apiPost("/api/payment/payuInit", payload); // Fixed URL path
+      const responseData = res?.data?.data;
+
+      if (responseData?.status === 200) {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        // Check if we have both UPI link and QR code
+        if (responseData.upiLink && responseData.qr) {
+          if (isMobile) {
+            // Use UPI deep link for mobile apps
+            window.location.href = responseData.upiLink;
+          } else {
+            // Show QR code in new tab for desktop
+            window.open(responseData.qr, "_blank", "noopener,noreferrer");
+          }
+        } else {
+          alert("Payment data incomplete");
+        }
+      } else {
+        alert("Failed to initiate payment: " + (responseData?.status_msg || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed: " + (error.response?.data?.message || "Please try again"));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const totalAmount = isDirectBuy ? productData?.total : cart?.totalAmount;
+  const totalAmount = isDirectBuy 
+    ? productData?.total 
+    : cart?.totalAmount || cart?.total;
 
   return (
     <div className="flex justify-center mt-12 px-4 mb-8">
@@ -91,59 +92,18 @@ function Checkout() {
         <div className="text-center text-xl mb-6">
           <span className="font-semibold text-gray-700">Total:</span>{" "}
           <span className="text-green-600 font-bold">
-            ₹{totalAmount?.toFixed(2)}
+            ₹{totalAmount?.toFixed(2) || "0.00"}
           </span>
         </div>
 
-        {/* Billing Details Form */}
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="Shipping Address"
-          value={shippingAddress}
-          onChange={(e) => setShippingAddress(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="City"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border"
-          placeholder="State"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-4 border"
-          placeholder="Postal Code"
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-        />
-
         <button
-          onClick={handleSubmit}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 rounded-xl text-lg font-semibold"
+          onClick={handlePaymentInit}
+          disabled={loading || (!productData && !cart)}
+          className={`w-full ${
+            loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+          } text-white font-semibold py-3 px-6 rounded-lg transition duration-300`}
         >
-          Confirm Order
+          {loading ? "Processing..." : "Pay Now via UPI"}
         </button>
       </div>
     </div>
