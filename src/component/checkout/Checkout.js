@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { apiGet, apiPost } from "../../utils/http";
 import { useSearchParams } from "next/navigation";
-import QRCode from "qrcode"; 
+import { apiGet, apiPost } from "../../utils/http";
+import QRCode from "qrcode"; // This will generate base64 QR code
 
 function Checkout() {
   const searchParams = useSearchParams();
@@ -39,9 +39,6 @@ function Checkout() {
       return;
     }
 
-    const upiUrl =
-      "upi://pay?pa=BUDANIYATECHNOLOGIESL.payu@mairtel&pn=BUDANIYATECHNOLOGIESLLP&tr=23850552117&tid=PPPL238505521171006251049396847c06b&am=10.00&cu=INR&tn=UPIIntent";
-
     const payload = {
       trxId: data.trxId || "trx_" + Date.now(),
       price: data.total || data.totalAmount || 0,
@@ -62,20 +59,15 @@ function Checkout() {
           window.innerWidth < 768;
 
         if (isMobile) {
+          // On mobile, redirect to UPI app
           window.location.href = responseData.qr;
         } else {
-          // ✅ Generate QR image from UPI URL
-          const qrImageDataUrl = await QRCode.toDataURL(upiUrl);
+          // On desktop, generate QR code image and show in new tab
+          const qrImage = await QRCode.toDataURL(responseData?.qr); // ✅ base64 image
 
-          const newTab = window.open(
-            "",
-            "_blank",
-            "noopener,noreferrer,width=500,height=600"
-          );
-          if (newTab) {
-            const html = `
-              <!DOCTYPE html>
-              <html lang="en">
+          const html = `
+            <!DOCTYPE html>
+            <html lang="en">
               <head>
                 <meta charset="UTF-8" />
                 <title>Scan QR to Pay</title>
@@ -94,31 +86,32 @@ function Checkout() {
                     margin-bottom: 20px;
                     color: #333;
                   }
+                  img {
+                    width: 256px;
+                    height: 256px;
+                    border: 1px solid #ccc;
+                  }
                 </style>
               </head>
               <body>
                 <h2>Scan to Pay</h2>
-                <img src="${qrImageDataUrl}" alt="QR Code" width="256" height="256" />
-                <p style="margin-top: 20px;">UPI: ${upiUrl}</p>
+                <img src="${qrImage}" alt="QR Code" />
               </body>
-              </html>
-            `;
+            </html>
+          `;
+
+          const newTab = window.open();
+          if (newTab) {
             newTab.document.write(html);
             newTab.document.close();
           }
         }
       } else {
-        alert(
-          "Payment data incomplete or failed: " +
-            (responseData?.status_msg || "Unknown error")
-        );
+        alert("Payment failed: " + (responseData?.status_msg || "Unknown error"));
       }
     } catch (error) {
       console.error("Payment error:", error);
-      alert(
-        "Payment failed: " +
-          (error.response?.data?.message || "Please try again")
-      );
+      alert("Payment failed: " + (error.response?.data?.message || "Please try again"));
     } finally {
       setLoading(false);
     }
@@ -131,9 +124,7 @@ function Checkout() {
   return (
     <div className="flex justify-center mt-12 px-4 mb-8">
       <div className="w-full max-w-xl bg-white border rounded-2xl shadow-2xl p-8">
-        <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">
-          Checkout
-        </h2>
+        <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">Checkout</h2>
         <div className="text-center text-xl mb-6">
           <span className="font-semibold text-gray-700">Total:</span>{" "}
           <span className="text-green-600 font-bold">
