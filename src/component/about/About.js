@@ -53,6 +53,10 @@ function About() {
         📩 Got a question? We’re here to help. Reach out to us anytime at <span className="font-bold text-blue-400 hover:text-yellow-400 cursor-pointer"> join@budaniyatechnologies.com</span>
         </p>
 
+         <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
+          Address - c/o ramswaroop s/o laxman ram, balaran, laxmangarh, sikar, Rajasthan (332401)
+        </p>
+
         {/* Buttons */}
         {/* <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
           <a
