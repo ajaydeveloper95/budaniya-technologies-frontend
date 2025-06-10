@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "../../utils/http";
 import { useSearchParams } from "next/navigation";
+import QRCode from "qrcode"; 
 
 function Checkout() {
   const searchParams = useSearchParams();
@@ -28,7 +29,7 @@ function Checkout() {
           console.error("Error fetching cart data:", error);
         });
     }
-  }, [searchParams]); // Added searchParams to dependency array
+  }, [searchParams]);
 
   const handlePaymentInit = async () => {
     const data = isDirectBuy ? productData : cart;
@@ -37,6 +38,9 @@ function Checkout() {
       alert("Amount not available");
       return;
     }
+
+    const upiUrl =
+      "upi://pay?pa=BUDANIYATECHNOLOGIESL.payu@mairtel&pn=BUDANIYATECHNOLOGIESLLP&tr=23850552117&tid=PPPL238505521171006251049396847c06b&am=10.00&cu=INR&tn=UPIIntent";
 
     const payload = {
       trxId: data.trxId || "trx_" + Date.now(),
@@ -49,37 +53,79 @@ function Checkout() {
 
     try {
       setLoading(true);
-      const res = await apiPost("/api/payment/payuInit", payload); // Fixed URL path
+      const res = await apiPost("/api/payment/payuInit", payload);
       const responseData = res?.data?.data;
 
-      if (responseData?.status === 200) {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
-        // Check if we have both UPI link and QR code
-        if (responseData.upiLink && responseData.qr) {
-          if (isMobile) {
-            // Use UPI deep link for mobile apps
-            window.location.href = responseData.upiLink;
-          } else {
-            // Show QR code in new tab for desktop
-            window.open(responseData.qr, "_blank", "noopener,noreferrer");
-          }
+      if (responseData?.status === 200 && responseData.qr) {
+        const isMobile =
+          /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+          window.innerWidth < 768;
+
+        if (isMobile) {
+          window.location.href = responseData.qr;
         } else {
-          alert("Payment data incomplete");
+          // ✅ Generate QR image from UPI URL
+          const qrImageDataUrl = await QRCode.toDataURL(upiUrl);
+
+          const newTab = window.open(
+            "",
+            "_blank",
+            "noopener,noreferrer,width=500,height=600"
+          );
+          if (newTab) {
+            const html = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <title>Scan QR to Pay</title>
+                <style>
+                  body {
+                    font-family: sans-serif;
+                    background: #f9fafb;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                  }
+                  h2 {
+                    margin-bottom: 20px;
+                    color: #333;
+                  }
+                </style>
+              </head>
+              <body>
+                <h2>Scan to Pay</h2>
+                <img src="${qrImageDataUrl}" alt="QR Code" width="256" height="256" />
+                <p style="margin-top: 20px;">UPI: ${upiUrl}</p>
+              </body>
+              </html>
+            `;
+            newTab.document.write(html);
+            newTab.document.close();
+          }
         }
       } else {
-        alert("Failed to initiate payment: " + (responseData?.status_msg || "Unknown error"));
+        alert(
+          "Payment data incomplete or failed: " +
+            (responseData?.status_msg || "Unknown error")
+        );
       }
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment failed: " + (error.response?.data?.message || "Please try again"));
+      alert(
+        "Payment failed: " +
+          (error.response?.data?.message || "Please try again")
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const totalAmount = isDirectBuy 
-    ? productData?.total 
+  const totalAmount = isDirectBuy
+    ? productData?.total
     : cart?.totalAmount || cart?.total;
 
   return (
@@ -88,14 +134,12 @@ function Checkout() {
         <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">
           Checkout
         </h2>
-
         <div className="text-center text-xl mb-6">
           <span className="font-semibold text-gray-700">Total:</span>{" "}
           <span className="text-green-600 font-bold">
             ₹{totalAmount?.toFixed(2) || "0.00"}
           </span>
         </div>
-
         <button
           onClick={handlePaymentInit}
           disabled={loading || (!productData && !cart)}
