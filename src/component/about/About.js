@@ -27,7 +27,7 @@ function About() {
 
         {/* Main Heading */}
         <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4 pl-10">
-          <span className="text-blue-300 md:text-4xl"> Welcome to</span> <br /> Budaniya Technologies
+          <span className="text-blue-300 md:text-4xl"> Welcome to</span> <br /> Budaniya Technologies LLP
         </h2>
 
         {/* Description */}
