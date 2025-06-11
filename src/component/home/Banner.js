@@ -23,7 +23,7 @@ function Banner() {
           <p className="text-gray-400 text-md">
             At{" "}
             <span className="font-semibold text-blue-400">
-              Budaniya Technologies
+              Budaniya Technologies LLP
             </span>
             , we focus on collaboration and innovation to deliver measurable
             results with cutting-edge technology.

@@ -13,7 +13,7 @@ const MyApp = ({ Component, pageProps }) => {
           <ToastContainer position="top-right" />
 
       <Head>
-        <title>Budaniya Technologies</title>
+        <title>Budaniya Technologies LLP</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CartProvider>

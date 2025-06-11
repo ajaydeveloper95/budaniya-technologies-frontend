@@ -102,7 +102,7 @@ function Navbar() {
           <Link href="/" className="flex items-center space-x-3">
             <Image src={Logo} className="h-8" height={40} alt="Logo" />
             <span className="self-center text-lg font-semibold whitespace-nowrap text-white">
-              Budaniya Technologies
+              Budaniya Technologies LLP
             </span>
           </Link>
 

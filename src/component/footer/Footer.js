@@ -58,10 +58,10 @@ function Footer() {
           >
             <Link href="/" className="flex items-center mb-4">
               <Image src={Logo} height={40} alt="Logo" className="me-3" />
-              <span className="text-2xl font-bold">Budaniya Technologies</span>
+              <span className="text-2xl font-bold">Budaniya Technologies LLP</span>
             </Link>
             <p className="text-sm text-gray-400">
-              At Budaniya Technologies, we believe collaboration and innovation are the keys to success.
+              At Budaniya Technologies LLP, we believe collaboration and innovation are the keys to success.
               We work closely with our clients to tailor our services and deliver measurable results through innovative solutions.
             </p>
           </motion.div>
@@ -134,7 +134,7 @@ function Footer() {
           variants={itemVariants}
         >
           <span>
-            © 2025 <Link href="/" className="hover:underline text-white">Budaniya Technologies</Link>. All Rights Reserved.
+            © 2025 <Link href="/" className="hover:underline text-white">Budaniya Technologies LLP</Link>. All Rights Reserved.
           </span>
           <div className="flex space-x-4 mt-4 md:mt-4">
             {/* Additional icons can be added here */}
