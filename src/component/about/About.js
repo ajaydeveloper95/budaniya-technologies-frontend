@@ -54,7 +54,7 @@ function About() {
         </p>
 
          <p className="text-gray-100 mb-6 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
-          Address - c/o ramswaroop s/o laxman ram, balaran, laxmangarh, sikar, Rajasthan (332401)
+          Address - c/o Ram Shawroop Budaniya, balaran, sikar, Rajasthan (332401)
         </p>
 
         {/* Buttons */}
