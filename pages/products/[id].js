@@ -171,7 +171,7 @@ const ProductDetailPage = () => {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                handleBuyNow(product._id);
+                handleAddToCart(product._id);
               }}
               className="bg-blue-400 text-black px-6 py-2 rounded font-bold w-full md:w-auto"
             >

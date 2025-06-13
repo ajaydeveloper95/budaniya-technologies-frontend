@@ -217,7 +217,7 @@ function Checkout() {
         {/* User Info */}
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">Your Details</h3>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-3 text-black">
             <input
               name="name"
               placeholder="Full Name"
@@ -245,7 +245,7 @@ function Checkout() {
         {/* Shipping Address */}
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">Shipping Address</h3>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-3 text-black">
             {["line1", "city", "state", "postalCode", "country"].map((field) => (
               <input
                 key={field}
