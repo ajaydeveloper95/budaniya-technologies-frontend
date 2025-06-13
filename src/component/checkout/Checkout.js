@@ -39,15 +39,13 @@ function Checkout() {
       apiGet("/api/cart")
         .then((response) => {
           setCart(response.data.cart);
-          const products = response.data.cart.items.map((item) => {
-            return {
-              product: item.product._id,
-              quantity: item.quantity,
-              total: item.total,
-              price: item.price,
-            };
-          });
-          setProducts(products)
+          const products = response.data.cart.items.map((item) => ({
+            product: item.product._id,
+            quantity: item.quantity,
+            total: item.total,
+            price: item.price,
+          }));
+          setProducts(products);
         })
         .catch((error) => {
           console.error("Error fetching cart data:", error);
@@ -55,23 +53,42 @@ function Checkout() {
     }
   }, [searchParams]);
 
+  const handleInputChange = (e, setter) => {
+    const { name, value } = e.target;
+    setter((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmitOrder = async () => {
     if (!userInfo.name || !userInfo.email || !userInfo.mobileNumber) {
       alert("Please fill in all user details");
       return;
     }
 
+    if (
+      !shippingAddress.line1 ||
+      !shippingAddress.city ||
+      !shippingAddress.state ||
+      !shippingAddress.postalCode ||
+      !shippingAddress.country
+    ) {
+      alert("Please fill in all shipping address fields");
+      return;
+    }
+
     const orderPayload = {
-      products,
+      products: isDirectBuy ? productData.products : products,
       shippingAddress,
-      type: "cart",
+      userInfo,
+      type: isDirectBuy ? "direct" : "cart",
     };
 
     try {
       setLoading(true);
       const res = await apiPost("/api/order/order", orderPayload);
+
       if (res.data.message === "Order created successfully") {
-        handlePaymentInit();
+        const orderId = res.data.orderId || res.data.data?._id;
+        await handlePaymentInit(orderId);
       } else {
         alert("Order creation failed.");
       }
@@ -83,25 +100,27 @@ function Checkout() {
     }
   };
 
-  const handlePaymentInit = async () => {
+  const handlePaymentInit = async (orderId) => {
     const data = isDirectBuy ? productData : cart;
-    const price = data?.total || data?.totalAmount || 0;
+    const amount = data?.total || data?.totalAmount;
 
-    if (!price || price <= 0) {
-      alert("Invalid amount.");
+    if (!amount) {
+      alert("Amount not available");
       return;
     }
 
     const payload = {
       trxId: data.trxId || "trx_" + Date.now(),
-      price,
-      name: userInfo.name,
+      price: amount,
+      orderId,
       email: userInfo.email,
+      name: userInfo.name,
       mobileNumber: userInfo.mobileNumber,
-      service: data.service || "checkout",
+      service: data.service || "Product Purchase",
     };
 
     try {
+      setLoading(true);
       const res = await apiPost("/api/payment/payuInit", payload);
       const responseData = res?.data?.data;
 
@@ -115,39 +134,66 @@ function Checkout() {
         } else {
           const qrImage = await QRCode.toDataURL(responseData.qr);
           const html = `
-            <html>
-              <head><title>Scan QR to Pay</title></head>
-              <body style="text-align:center; padding:20px;">
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <title>Scan QR to Pay</title>
+                <style>
+                  body {
+                    font-family: sans-serif;
+                    background: #f9fafb;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                  }
+                  h2 {
+                    margin-bottom: 20px;
+                    color: #333;
+                  }
+                  img {
+                    width: 256px;
+                    height: 256px;
+                    border: 1px solid #ccc;
+                  }
+                </style>
+              </head>
+              <body>
                 <h2>Scan to Pay</h2>
-                <img src="${qrImage}" alt="QR Code" width="256" height="256" />
+                <img src="${qrImage}" alt="QR Code" />
               </body>
             </html>
           `;
+
           const newTab = window.open();
           if (newTab) {
             newTab.document.write(html);
             newTab.document.close();
           }
         }
+
+        // Optional: Redirect to success page after payment
+        // setTimeout(() => window.location.href = "/order-success", 10000);
       } else {
-        alert(
-          "Payment failed: " + (responseData?.status_msg || "Unknown error")
-        );
+        alert("Payment failed: " + (responseData?.status_msg || "Unknown error"));
       }
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment failed.");
+      alert(
+        "Payment failed: " +
+          (error.response?.data?.message || "Please try again")
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   const totalAmount = isDirectBuy
     ? productData?.total
     : cart?.totalAmount || cart?.total;
-
-  const handleInputChange = (e, setter) => {
-    const { name, value } = e.target;
-    setter((prev) => ({ ...prev, [name]: value }));
-  };
 
   const productList = productData?.products || cart?.products || [];
 
@@ -200,18 +246,16 @@ function Checkout() {
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">Shipping Address</h3>
           <div className="grid grid-cols-1 gap-3">
-            {["line1", "city", "state", "postalCode", "country"].map(
-              (field) => (
-                <input
-                  key={field}
-                  name={field}
-                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                  value={shippingAddress[field]}
-                  onChange={(e) => handleInputChange(e, setShippingAddress)}
-                  className="border rounded px-4 py-2"
-                />
-              )
-            )}
+            {["line1", "city", "state", "postalCode", "country"].map((field) => (
+              <input
+                key={field}
+                name={field}
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                value={shippingAddress[field]}
+                onChange={(e) => handleInputChange(e, setShippingAddress)}
+                className="border rounded px-4 py-2"
+              />
+            ))}
           </div>
         </div>
 
