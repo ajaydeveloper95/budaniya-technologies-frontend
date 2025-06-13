@@ -29,23 +29,21 @@ function Order() {
         {orders.map((order) => (
           <div key={order._id} className="border p-6 rounded-lg shadow-md">
             <div className="flex justify-between">
-              <h3 className="text-xl font-bold">Order ID: {order._id}</h3>
-              <span className="text-sm text-gray-600">
+              <h3 className="text-xl font-bold">Order ID: {order._id}</h3>8
+              <span
+                className={`text-sm font-medium ${
+                  order.status === "pending"
+                    ? "text-yellow-500"
+                    : order.status === "delivered"
+                    ? "text-green-600"
+                    : order.status === "cancelled"
+                    ? "text-red-500"
+                    : "text-gray-600"
+                }`}
+              >
                 Status: {order.status}
               </span>
             </div>
-            <div className="mt-4">
-              <h4 className="text-lg font-semibold">Customer Information:</h4>
-              <p>Name: {order.customer.firstName} {order.customer.lastName}</p>
-              <p>Email: {order.customer.email}</p>
-              <p>Mobile: {order.customer.mobile}</p>
-            </div>
-
-            <div className="mt-4">
-              <h4 className="text-lg font-semibold">Shipping Address:</h4>
-              <p>{order.shippingAddress.state}, {order.shippingAddress.country}</p>
-            </div>
-
             <div className="mt-4">
               <h4 className="text-lg font-semibold">Products:</h4>
               <div className="space-y-4">
@@ -57,7 +55,9 @@ function Order() {
                       className="w-24 h-24 object-cover mr-4"
                     />
                     <div>
-                      <p className="font-medium">{product.product.productName}</p>
+                      <p className="font-medium">
+                        {product.product.productName}
+                      </p>
                       <p>Price: ₹{product.price}</p>
                       <p>Quantity: {product.quantity}</p>
                       <p>Total: ₹{product.total}</p>
@@ -65,6 +65,21 @@ function Order() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold">Customer Information:</h4>
+              <p>
+                Name: {order.customer.firstName} {order.customer.lastName}
+              </p>
+              <p>Email: {order.customer.email}</p>
+              <p>Mobile: {order.customer.mobile}</p>
+            </div>
+
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold">Shipping Address:</h4>
+              <p>
+                {order.shippingAddress.state}, {order.shippingAddress.country}
+              </p>
             </div>
 
             <div className="mt-4">
