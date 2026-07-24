@@ -1,343 +1,680 @@
 import React from "react";
 
-function index() {
-  return (
-    <div className="w-2/3 m-auto py-4">
-      <h1 className="text-2xl text-center my-4">Terms and Conditions</h1>
-      <br />
-      <p>Last updated: May 18, 2024</p>
-      <br />
+const sections = [
+  { id: "overview", title: "Overview" },
+  { id: "company", title: "Company Information" },
+  { id: "definitions", title: "Definitions" },
+  { id: "acceptance", title: "Acceptance of Terms" },
+  { id: "services", title: "Services" },
+  { id: "responsibilities", title: "User Responsibilities" },
+  { id: "intellectual", title: "Intellectual Property" },
+  { id: "payments", title: "Payments" },
+  { id: "privacy", title: "Privacy" },
+  { id: "termination", title: "Termination" },
+  { id: "liability", title: "Limitation of Liability" },
+  { id: "contact", title: "Contact Us" },
+];
 
-      <p>
-        Please read these terms and conditions carefully before using Our
-        Service.
-      </p>
-      <br />
-      <h2>Interpretation and Definitions</h2>
-      <br />
-      <h3>Interpretation</h3>
-      <p>
-        The words of which the initial letter is capitalized have meanings
-        defined under the following conditions. The following definitions shall
-        have the same meaning regardless of whether they appear in singular or
-        in plural.
-      </p>
-      <br />
-      <h3>Definitions</h3>
-      <p>For the purposes of these Terms and Conditions:</p>
-      <ul>
-        <li>
-        <br />
-          <p>
-            <strong>Affiliate</strong> means an entity that controls, is
-            controlled by or is under common control with a party, where
-            "control" means ownership of 50% or more of the shares, equity
-            interest or other securities entitled to vote for election of
-            directors or other managing authority.
+export default function Index() {
+  return (
+    <main className=" min-h-screen">
+      {/* Hero */}
+      <section className=" py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <h1 className="text-4xl md:text-5xl font-bold">
+            Terms & Conditions
+          </h1>
+
+          <p className="mt-4 text-blue-100 max-w-3xl leading-7">
+            Please read these Terms & Conditions carefully before using the
+            website and services offered by Budaniya Technologies LLP. By
+            accessing or using our website, you agree to comply with these
+            Terms.
           </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>Country</strong> refers to: Rajasthan, India
-          </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>Company</strong> (referred to as either "the Company", "We",
-            "Us" or "Our" in this Agreement) refers to Budaniya Technologies,
-            madhopura,balaran,sikar,Rajasthan (332401).
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Device</strong> means any device that can access the Service
-            such as a computer, a cellphone or a digital tablet.
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Service</strong> refers to the Website.
-          </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>Terms and Conditions</strong> (also referred as "Terms")
-            mean these Terms and Conditions that form the entire agreement
-            between You and the Company regarding the use of the Service. This
-            Terms and Conditions agreement has been created with the help of the{" "}
-            <a
-              href="https://www.termsfeed.com/terms-conditions-generator/"
-              target="_blank"
-            >
-              Terms and Conditions Generator
-            </a>
-            .
-          </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>Third-party Social Media Service</strong> means any services
-            or content (including data, information, products or services)
-            provided by a third-party that may be displayed, included or made
-            available by the Service.
-          </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>Website</strong> refers to Budaniya Technologies, accessible
-            from{" "}
-            <a
-              href="https:budaniyatechnologies.com"
-              rel="external nofollow noopener"
-              target="_blank"
-            >
-              https:budaniyatechnologies.com
-            </a>
-          </p>
-        </li>
-        <li>
-        <br />
-          <p>
-            <strong>You</strong> means the individual accessing or using the
-            Service, or the company, or other legal entity on behalf of which
-            such individual is accessing or using the Service, as applicable.
-          </p>
-        </li>
-      </ul>
-      <br />
-      <h2>Acknowledgment</h2>
-      <p>
-        These are the Terms and Conditions governing the use of this Service and
-        the agreement that operates between You and the Company. These Terms and
-        Conditions set out the rights and obligations of all users regarding the
-        use of the Service.
-      </p>
-      <p>
-        Your access to and use of the Service is conditioned on Your acceptance
-        of and compliance with these Terms and Conditions. These Terms and
-        Conditions apply to all visitors, users and others who access or use the
-        Service.
-      </p>
-      <p>
-        By accessing or using the Service You agree to be bound by these Terms
-        and Conditions. If You disagree with any part of these Terms and
-        Conditions then You may not access the Service.
-      </p>
-      <p>
-        You represent that you are over the age of 18. The Company does not
-        permit those under 18 to use the Service.
-      </p>
-      <p>
-        Your access to and use of the Service is also conditioned on Your
-        acceptance of and compliance with the Privacy Policy of the Company. Our
-        Privacy Policy describes Our policies and procedures on the collection,
-        use and disclosure of Your personal information when You use the
-        Application or the Website and tells You about Your privacy rights and
-        how the law protects You. Please read Our Privacy Policy carefully
-        before using Our Service.
-      </p>
-      <br />
-      <h2>Links to Other Websites</h2>
-      <p>
-        Our Service may contain links to third-party web sites or services that
-        are not owned or controlled by the Company.
-      </p>
-      <p>
-        The Company has no control over, and assumes no responsibility for, the
-        content, privacy policies, or practices of any third party web sites or
-        services. You further acknowledge and agree that the Company shall not
-        be responsible or liable, directly or indirectly, for any damage or loss
-        caused or alleged to be caused by or in connection with the use of or
-        reliance on any such content, goods or services available on or through
-        any such web sites or services.
-      </p>
-      <p>
-        We strongly advise You to read the terms and conditions and privacy
-        policies of any third-party web sites or services that You visit.
-      </p>
-      <br />
-      <h2>Termination</h2>
-      <p>
-        We may terminate or suspend Your access immediately, without prior
-        notice or liability, for any reason whatsoever, including without
-        limitation if You breach these Terms and Conditions.
-      </p>
-      <p>
-        Upon termination, Your right to use the Service will cease immediately.
-      </p>
-      <br />
-      <h2>Limitation of Liability</h2>
-      <p>
-        Notwithstanding any damages that You might incur, the entire liability
-        of the Company and any of its suppliers under any provision of this
-        Terms and Your exclusive remedy for all of the foregoing shall be
-        limited to the amount actually paid by You through the Service or 100
-        USD if You haven't purchased anything through the Service.
-      </p>
-      <p>
-        To the maximum extent permitted by applicable law, in no event shall the
-        Company or its suppliers be liable for any special, incidental,
-        indirect, or consequential damages whatsoever (including, but not
-        limited to, damages for loss of profits, loss of data or other
-        information, for business interruption, for personal injury, loss of
-        privacy arising out of or in any way related to the use of or inability
-        to use the Service, third-party software and/or third-party hardware
-        used with the Service, or otherwise in connection with any provision of
-        this Terms), even if the Company or any supplier has been advised of the
-        possibility of such damages and even if the remedy fails of its
-        essential purpose.
-      </p>
-      <p>
-        Some states do not allow the exclusion of implied warranties or
-        limitation of liability for incidental or consequential damages, which
-        means that some of the above limitations may not apply. In these states,
-        each party's liability will be limited to the greatest extent permitted
-        by law.
-      </p>
-      <br />
-      <h2>"AS IS" and "AS AVAILABLE" Disclaimer</h2>
-      <p>
-        The Service is provided to You "AS IS" and "AS AVAILABLE" and with all
-        faults and defects without warranty of any kind. To the maximum extent
-        permitted under applicable law, the Company, on its own behalf and on
-        behalf of its Affiliates and its and their respective licensors and
-        service providers, expressly disclaims all warranties, whether express,
-        implied, statutory or otherwise, with respect to the Service, including
-        all implied warranties of merchantability, fitness for a particular
-        purpose, title and non-infringement, and warranties that may arise out
-        of course of dealing, course of performance, usage or trade practice.
-        Without limitation to the foregoing, the Company provides no warranty or
-        undertaking, and makes no representation of any kind that the Service
-        will meet Your requirements, achieve any intended results, be compatible
-        or work with any other software, applications, systems or services,
-        operate without interruption, meet any performance or reliability
-        standards or be error free or that any errors or defects can or will be
-        corrected.
-      </p>
-      <p>
-        Without limiting the foregoing, neither the Company nor any of the
-        company's provider makes any representation or warranty of any kind,
-        express or implied: (i) as to the operation or availability of the
-        Service, or the information, content, and materials or products included
-        thereon; (ii) that the Service will be uninterrupted or error-free;
-        (iii) as to the accuracy, reliability, or currency of any information or
-        content provided through the Service; or (iv) that the Service, its
-        servers, the content, or e-mails sent from or on behalf of the Company
-        are free of viruses, scripts, trojan horses, worms, malware, timebombs
-        or other harmful components.
-      </p>
-      <p>
-        Some jurisdictions do not allow the exclusion of certain types of
-        warranties or limitations on applicable statutory rights of a consumer,
-        so some or all of the above exclusions and limitations may not apply to
-        You. But in such a case the exclusions and limitations set forth in this
-        section shall be applied to the greatest extent enforceable under
-        applicable law.
-      </p>
-      <br />
-      <h2>Governing Law</h2>
-      <p>
-        The laws of the Country, excluding its conflicts of law rules, shall
-        govern this Terms and Your use of the Service. Your use of the
-        Application may also be subject to other local, state, national, or
-        international laws.
-      </p>
-      <br />
-      <h2>Disputes Resolution</h2>
-      <p>
-        If You have any concern or dispute about the Service, You agree to first
-        try to resolve the dispute informally by contacting the Company.
-      </p>
-      <br />
-      <h2>For European Union (EU) Users</h2>
-      <p>
-        If You are a European Union consumer, you will benefit from any
-        mandatory provisions of the law of the country in which You are
-        resident.
-      </p>
-      <br />
-      <h2>United States Legal Compliance</h2>
-      <p>
-        You represent and warrant that (i) You are not located in a country that
-        is subject to the United States government embargo, or that has been
-        designated by the United States government as a "terrorist supporting"
-        country, and (ii) You are not listed on any United States government
-        list of prohibited or restricted parties.
-      </p>
-      <br />
-      <h2>Severability and Waiver</h2>
-      <br />
-      <h3>Severability</h3>
-      <p>
-        If any provision of these Terms is held to be unenforceable or invalid,
-        such provision will be changed and interpreted to accomplish the
-        objectives of such provision to the greatest extent possible under
-        applicable law and the remaining provisions will continue in full force
-        and effect.
-      </p>
-      <br />
-      <h3>Waiver</h3>
-      <p>
-        Except as provided herein, the failure to exercise a right or to require
-        performance of an obligation under these Terms shall not affect a
-        party's ability to exercise such right or require such performance at
-        any time thereafter nor shall the waiver of a breach constitute a waiver
-        of any subsequent breach.
-      </p>
-      <h2>Translation Interpretation</h2>
-      <p>
-        These Terms and Conditions may have been translated if We have made them
-        available to You on our Service. You agree that the original English
-        text shall prevail in the case of a dispute.
-      </p>
-      <br />
-      <h2>Changes to These Terms and Conditions</h2>
-      <p>
-        We reserve the right, at Our sole discretion, to modify or replace these
-        Terms at any time. If a revision is material We will make reasonable
-        efforts to provide at least 30 days' notice prior to any new terms
-        taking effect. What constitutes a material change will be determined at
-        Our sole discretion.
-      </p>
-      <p>
-        By continuing to access or use Our Service after those revisions become
-        effective, You agree to be bound by the revised terms. If You do not
-        agree to the new terms, in whole or in part, please stop using the
-        website and the Service.
-      </p>
-      <br />
-      <h2>Contact Us</h2>
-      <p>
-        If you have any questions about these Terms and Conditions, You can
-        contact us:
-      </p>
-      <ul>
-        <li>
-          <p>By email: join@budaniyatechnologies.com</p>
-        </li>
-        <li>
-          <p>
-            By visiting this page on our website:{" "}
-            <a
-              href="https://budaniyatechnoloiges.com/contact"
-              rel="external nofollow noopener"
-              target="_blank"
-            >
-              https://budaniyatechnoloiges.com/contact
-            </a>
-          </p>
-        </li>
-        <li>
-          <p>By phone number: + 91 7014162730</p>
-        </li>
-      </ul>
-    </div>
+
+          <div className="mt-6 flex flex-wrap gap-4 text-sm">
+            <span className="/20 px-4 py-2 rounded-full">
+              Effective Date: 24 July 2026
+            </span>
+
+            <span className="/20 px-4 py-2 rounded-full">
+              Last Updated: {new Date().toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 py-12 lg:grid lg:grid-cols-[260px_1fr] gap-10">
+
+        {/* Sidebar */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-24  rounded-xl shadow border p-5">
+            <h2 className="font-bold text-lg mb-4">
+              Contents
+            </h2>
+
+            <nav>
+              <ul className="space-y-3">
+                {sections.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      className="hover:text-blue-600 transition"
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <div className="space-y-12">
+
+          {/* Overview */}
+
+          <section
+            id="overview"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-5">
+              Overview
+            </h2>
+
+            <p className="  leading-8">
+              These Terms and Conditions ("Terms") govern your access to and use
+              of the website, software, applications, APIs, digital platforms,
+              and services provided by <strong>Budaniya Technologies LLP</strong>.
+              By accessing our website or using any of our services, you agree
+              to be legally bound by these Terms. If you do not agree with any
+              provision, please discontinue use of the website immediately.
+            </p>
+          </section>
+
+          {/* Company */}
+
+          <section
+            id="company"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Company Information
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-8">
+
+              <div>
+                <h3 className="font-semibold text-xl mb-3">
+                  Legal Entity
+                </h3>
+
+                <p className="  leading-8">
+                  <strong>Budaniya Technologies LLP</strong>
+                </p>
+
+                <p className="  leading-8">
+                  A Limited Liability Partnership registered in India.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-xl mb-3">
+                  Registered Office
+                </h3>
+
+                <p className="  leading-8">
+                  c/o Ramswaroop S/o Laxmanram
+                  <br />
+                  Madhopura, Balaran
+                  <br />
+                  Sikar, Rajasthan – 332401
+                  <br />
+                  India
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Definitions */}
+
+          <section
+            id="definitions"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Definitions
+            </h2>
+
+            <div className="space-y-5  ">
+
+              <p>
+                <strong>Company</strong> refers to Budaniya Technologies LLP,
+                including its employees, affiliates, successors, and authorized
+                representatives.
+              </p>
+
+              <p>
+                <strong>Website</strong> refers to
+                https://budaniyatechnologies.com and all related domains,
+                applications, APIs, and services.
+              </p>
+
+              <p>
+                <strong>Services</strong> means software development,
+                consulting, web development, mobile applications, SaaS
+                platforms, cloud services, payment integrations, APIs, and all
+                digital products provided by the Company.
+              </p>
+
+              <p>
+                <strong>User</strong>, <strong>You</strong>, or{" "}
+                <strong>Your</strong> refers to any individual, company,
+                organization, or entity using our Website or Services.
+              </p>
+
+              <p>
+                <strong>Content</strong> includes all text, graphics,
+                documentation, source code, software, logos, trademarks,
+                databases, images, videos, designs, icons, and other material
+                available on this Website.
+              </p>
+
+            </div>
+          </section>
+
+          {/* Acceptance */}
+
+          <section
+            id="acceptance"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Acceptance of Terms
+            </h2>
+
+            <p className="  leading-8">
+              By accessing, browsing, registering, or using any part of our
+              Website or Services, you acknowledge that you have read,
+              understood, and agree to be legally bound by these Terms and
+              Conditions and our Privacy Policy.
+            </p>
+
+            <p className="mt-5   leading-8">
+              If you do not agree to these Terms, you must immediately stop
+              using our Website and Services.
+            </p>
+
+            <p className="mt-5   leading-8">
+              You represent that you are at least 18 years of age or otherwise
+              legally capable of entering into a binding agreement under
+              applicable law.
+            </p>
+          </section>
+
+          {/* Next sections will continue in Part 2 */}
+          {/* Services */}
+
+          <section
+            id="services"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Services
+            </h2>
+
+            <p className="  leading-8">
+              Budaniya Technologies LLP provides technology solutions including,
+              but not limited to:
+            </p>
+
+            <ul className="list-disc pl-6 mt-5 space-y-3  ">
+              <li>Custom Software Development</li>
+              <li>Website Design & Development</li>
+              <li>Mobile Application Development</li>
+              <li>Cloud Solutions</li>
+              <li>SaaS Products</li>
+              <li>API Development & Integration</li>
+              <li>Payment Gateway Solutions</li>
+              <li>IT Consulting Services</li>
+              <li>Maintenance & Technical Support</li>
+            </ul>
+
+            <p className="mt-6   leading-8">
+              We reserve the right to modify, suspend, discontinue, or enhance
+              any Service at any time without prior notice.
+            </p>
+          </section>
+
+          {/* User Responsibilities */}
+
+          <section
+            id="responsibilities"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              User Responsibilities
+            </h2>
+
+            <p className="  leading-8">
+              By using our Website or Services, you agree that you will:
+            </p>
+
+            <ul className="list-disc pl-6 mt-5 space-y-3  ">
+              <li>Comply with all applicable laws and regulations.</li>
+              <li>Provide accurate and truthful information.</li>
+              <li>Maintain the confidentiality of your account credentials.</li>
+              <li>Use the Website only for lawful purposes.</li>
+              <li>Respect the intellectual property rights of the Company.</li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-8 mb-4">
+              Prohibited Activities
+            </h3>
+
+            <ul className="list-disc pl-6 space-y-3  ">
+              <li>Attempting unauthorized access to our servers.</li>
+              <li>Reverse engineering any software.</li>
+              <li>Copying or distributing our source code.</li>
+              <li>Uploading malware, ransomware or malicious scripts.</li>
+              <li>Scraping website content without permission.</li>
+              <li>Using automated bots that negatively affect our services.</li>
+              <li>Impersonating another person or organization.</li>
+              <li>Violating any applicable law.</li>
+            </ul>
+          </section>
+
+          {/* Intellectual Property */}
+
+          <section
+            id="intellectual"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Intellectual Property Rights
+            </h2>
+
+            <p className="  leading-8">
+              Unless otherwise expressly stated, all intellectual property
+              rights in this Website and our Services are owned by or licensed
+              to <strong>Budaniya Technologies LLP</strong>.
+            </p>
+
+            <p className="mt-5   leading-8">
+              This includes, without limitation:
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-4 mt-6">
+              <ul className="list-disc pl-6 space-y-2  ">
+                <li>Website Design</li>
+                <li>User Interface (UI)</li>
+                <li>User Experience (UX)</li>
+                <li>Source Code</li>
+                <li>Software Applications</li>
+                <li>APIs</li>
+                <li>Databases</li>
+                <li>Business Logic</li>
+              </ul>
+
+              <ul className="list-disc pl-6 space-y-2  ">
+                <li>Company Logo</li>
+                <li>Graphics & Icons</li>
+                <li>Documentation</li>
+                <li>Text Content</li>
+                <li>Images & Videos</li>
+                <li>Trademarks</li>
+                <li>Service Marks</li>
+                <li>Brand Identity</li>
+              </ul>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-red-200 p-6">
+              <h3 className="text-lg font-semibold text-red-700 mb-3">
+                Restrictions :
+              </h3>
+
+              <p className="  leading-8">
+                You may not copy, reproduce, modify, publish, distribute,
+                reverse engineer, decompile, mirror, scrape, sell, license,
+                lease, or commercially exploit any portion of the Website,
+                Services, software, APIs, source code, or content without the
+                prior written consent of Budaniya Technologies LLP.
+              </p>
+
+              <p className="mt-4   leading-8">
+                Unauthorized use of our intellectual property may result in
+                civil and criminal legal action under applicable intellectual
+                property and copyright laws.
+              </p>
+            </div>
+          </section>
+
+          {/* Payments */}
+
+          <section
+            id="payments"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Payments
+            </h2>
+
+            <p className="  leading-8">
+              Certain products or services offered by Budaniya Technologies LLP
+              may require payment. By purchasing our services, you agree to pay
+              all applicable fees, taxes, and charges.
+            </p>
+
+            <ul className="list-disc pl-6 mt-5 space-y-3  ">
+              <li>All prices are subject to change without prior notice.</li>
+              <li>Applicable GST and taxes may be charged separately.</li>
+              <li>Invoices must be paid within the agreed payment terms.</li>
+              <li>Late payments may result in suspension of services.</li>
+              <li>Unless otherwise agreed in writing, payments are non-refundable.</li>
+            </ul>
+          </section>
+
+          {/* Privacy */}
+
+          <section
+            id="privacy"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Privacy
+            </h2>
+
+            <p className="  leading-8">
+              Your privacy is important to us. The collection, storage, use,
+              and disclosure of your personal information are governed by our
+              Privacy Policy.
+            </p>
+
+            <p className="mt-5   leading-8">
+              By using our Website and Services, you consent to the collection
+              and processing of your information in accordance with our Privacy
+              Policy.
+            </p>
+          </section>
+
+          {/* Third Party Services */}
+
+          <section
+            id="thirdparty"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Third-Party Services
+            </h2>
+
+            <p className="  leading-8">
+              Our Website and Services may integrate with or contain links to
+              third-party platforms, payment gateways, cloud providers,
+              analytics services, APIs, or software.
+            </p>
+
+            <p className="mt-5   leading-8">
+              Budaniya Technologies LLP is not responsible for the content,
+              security, privacy practices, or availability of third-party
+              services. Your use of such services is governed by their
+              respective terms and privacy policies.
+            </p>
+          </section>
+
+          {/* Confidentiality */}
+
+          <section
+            id="confidentiality"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Confidentiality
+            </h2>
+
+            <p className="  leading-8">
+              Any confidential information shared between you and Budaniya
+              Technologies LLP during the course of providing services shall be
+              treated as confidential and shall not be disclosed to any third
+              party except where required by law or with prior written consent.
+            </p>
+          </section>
+
+          {/* start */}
+          {/* Termination */}
+
+          <section
+            id="termination"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Termination
+            </h2>
+
+            <p className="  leading-8">
+              Budaniya Technologies LLP reserves the right to suspend or
+              terminate your access to the Website or Services immediately,
+              without prior notice, if you violate these Terms or engage in any
+              activity that may harm the Company, its users, or its reputation.
+            </p>
+
+            <p className="mt-5   leading-8">
+              Upon termination, your right to access and use our Services will
+              immediately cease. Any provisions that by their nature should
+              survive termination shall remain in effect.
+            </p>
+          </section>
+
+          {/* Limitation of Liability */}
+
+          <section
+            id="liability"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Limitation of Liability
+            </h2>
+
+            <p className="  leading-8">
+              To the fullest extent permitted by law, Budaniya Technologies LLP,
+              its partners, employees, affiliates, licensors, and service
+              providers shall not be liable for any indirect, incidental,
+              consequential, punitive, or special damages arising out of or
+              relating to your use of the Website or Services.
+            </p>
+
+            <p className="mt-5   leading-8">
+              This includes, but is not limited to, loss of revenue, business,
+              profits, goodwill, data, business interruption, or any other
+              commercial damages.
+            </p>
+          </section>
+
+          {/* Disclaimer */}
+
+          <section
+            id="disclaimer"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Disclaimer
+            </h2>
+
+            <p className="  leading-8">
+              The Website and all Services are provided on an <strong>"AS IS"</strong>
+              {" "}and <strong>"AS AVAILABLE"</strong> basis without warranties
+              of any kind, whether express or implied.
+            </p>
+
+            <p className="mt-5   leading-8">
+              While we strive to provide accurate and reliable information,
+              Budaniya Technologies LLP does not guarantee uninterrupted
+              availability, error-free operation, or complete accuracy of any
+              content or services.
+            </p>
+          </section>
+
+          {/* Indemnification */}
+
+          <section
+            id="indemnification"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Indemnification
+            </h2>
+
+            <p className="  leading-8">
+              You agree to indemnify, defend, and hold harmless Budaniya
+              Technologies LLP, its partners, directors, employees, contractors,
+              and affiliates from any claims, liabilities, losses, damages,
+              costs, expenses, or legal fees arising from:
+            </p>
+
+            <ul className="list-disc pl-6 mt-5 space-y-2  ">
+              <li>Your use of the Website or Services.</li>
+              <li>Your violation of these Terms.</li>
+              <li>Your infringement of any third-party rights.</li>
+              <li>Your violation of applicable laws.</li>
+            </ul>
+          </section>
+
+          {/* Force Majeure */}
+
+          <section
+            id="force-majeure"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Force Majeure
+            </h2>
+
+            <p className="  leading-8">
+              Budaniya Technologies LLP shall not be liable for any delay or
+              failure in performance resulting from circumstances beyond its
+              reasonable control, including natural disasters, war, terrorism,
+              pandemics, cyber attacks, internet failures, power outages,
+              governmental actions, labor disputes, or other unforeseen events.
+            </p>
+          </section>
+
+          {/* Governing Law */}
+
+          <section
+            id="governing-law"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Governing Law
+            </h2>
+
+            <p className="  leading-8">
+              These Terms and Conditions shall be governed by and interpreted in
+              accordance with the laws of India, without regard to its conflict
+              of law principles.
+            </p>
+          </section>
+
+          {/* Jurisdiction */}
+
+          <section
+            id="jurisdiction"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Jurisdiction
+            </h2>
+
+            <p className="  leading-8">
+              Any dispute arising from or relating to these Terms or the use of
+              our Website or Services shall be subject to the exclusive
+              jurisdiction of the competent courts located in Sikar,
+              Rajasthan, India.
+            </p>
+          </section>
+
+          {/* Changes */}
+
+          <section
+            id="changes"
+            className="rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-6">
+              Changes to These Terms
+            </h2>
+
+            <p className="leading-8">
+              Budaniya Technologies LLP reserves the right to modify or update
+              these Terms at any time. Updated versions will become effective
+              immediately upon publication on this Website unless otherwise
+              stated.
+            </p>
+
+            <p className="mt-5  leading-8">
+              Continued use of our Website or Services after any changes
+              constitutes acceptance of the revised Terms.
+            </p>
+          </section>
+
+          {/* Contact */}
+
+          <section
+            id="contact"
+            className="scroll-mt-28 rounded-2xl shadow-sm border p-8"
+          >
+            <h2 className="text-3xl font-bold mb-8">
+              Contact Us
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-8">
+
+              <div className="rounded-xl p-6 border">
+                <h3 className="font-semibold text-xl mb-4">
+                  Company Details :
+                </h3>
+
+                <p className="  leading-8">
+                  <strong>Budaniya Technologies LLP</strong>
+                </p>
+
+                <p className="  leading-8 mt-3">
+                  Registered Office
+                  <br />
+                  c/o Ramswaroop S/o Laxmanram
+                  <br />
+                  Madhopura, Balaran
+                  <br />
+                  Sikar, Rajasthan – 332401
+                  <br />
+                  India
+                </p>
+              </div>
+
+              <div className=" rounded-xl p-6 border">
+                <h3 className="font-semibold text-xl mb-4">
+                  Contact Information :
+                </h3>
+
+                <p className="mb-3">
+                  📧 join@budaniyatechnologies.com
+                </p>
+
+                <p className="mb-3">
+                  📞 +91 7014162730
+                </p>
+
+                <p>
+                  🌐 https://budaniyatechnologies.com
+                </p>
+              </div>
+
+            </div>
+          </section>
+          {/* end */}
+
+        </div >
+      </div >
+    </main >
   );
 }
-
-export default index;
