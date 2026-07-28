@@ -98,7 +98,7 @@ const ProductDetailPage = () => {
           <img
             src={mainImage || "/placeholder.jpg"}
             alt={product.productName}
-            className="w-full h-64 object-cover rounded-lg"
+            className="w-full object-cover rounded-lg"
           />
           <div className="mt-4 mb-8 flex flex-wrap gap-4">
             {product.images?.map((image, index) => (
