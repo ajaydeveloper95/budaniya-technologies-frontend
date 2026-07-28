@@ -106,7 +106,7 @@ const ProductDetailPage = () => {
                 key={index}
                 src={image || "/placeholder.jpg"}
                 alt={`Product Image ${index + 1}`}
-                className={`w-16 h-16 object-cover cursor-pointer border-2 rounded ${
+                className={`w-16 object-cover cursor-pointer border-2 rounded ${
                   mainImage === image ? "border-yellow-400" : "border-gray-400"
                 }`}
                 onClick={() => setMainImage(image)}
