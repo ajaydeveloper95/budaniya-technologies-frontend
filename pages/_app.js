@@ -5,6 +5,7 @@ import Head from "next/head";
 import { CartProvider } from "../src/component/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Script from "next/script";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
@@ -14,22 +15,30 @@ const MyApp = ({ Component, pageProps }) => {
       <Head>
         <title>Budaniya Technologies LLP</title>
         <link rel="icon" href="/favicon.ico" />
-        <script
+
+        {/* Google AdSense */}
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9178494129435619"
-          crossorigin="anonymous"
-        ></script>
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
 
-        <script
+        {/* Google Analytics */}
+        <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-8RQH9FSEW6"
-        ></script>
+          strategy="afterInteractive"
+        />
 
-        <script>
-          window.dataLayer = window.dataLayer || [] function gtag()
-          {dataLayer.push(arguments)}
-          gtag('js', new Date()); gtag('config', 'G-8RQH9FSEW6');
-        </script>
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8RQH9FSEW6');
+          `}
+        </Script>
       </Head>
       <CartProvider>
         <Navbar />
