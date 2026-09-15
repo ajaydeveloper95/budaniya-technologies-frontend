@@ -13,6 +13,9 @@ const MyApp = ({ Component, pageProps }) => {
       <Head>
         <title>Budaniya Technologies LLP</title>
         <link rel="icon" href="/favicon.ico" />
+
+        {/* Google AdSense Account */}
+        <meta name="google-adsense-account" content="ca-pub-9178494129435619" />
       </Head>
 
       {/* Google AdSense */}
